@@ -1,0 +1,6 @@
+<h1>Lista de Laboratórios</h1>
+<ul>
+  <% laboratorios.forEach(lab => { %>
+    <li><a href="/laboratorios/<%= lab.id %>"><%= lab.nome %></a> - Status: <%= lab.status %></li>
+  <% }); %>
+</ul>

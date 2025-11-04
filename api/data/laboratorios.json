@@ -1,0 +1,36 @@
+[
+  { 
+    "id": 101, "nome": "Lab 101", "status": "livre",
+    "dispositivos": [
+      {
+        "id_dispositivo": 10101,
+        "nome": "PC1", 
+        "tipo": "computador",
+        "status": "livre" 
+      },
+      {
+        "id_dispositivo": 10102, 
+        "nome": "PC2",
+        "tipo": "computador", 
+        "status": "inoperante"
+      },
+      {
+        "id_dispositivo": 10103, 
+        "nome": "Projetor", 
+        "tipo": "projetor",
+        "status": "livre"
+      }
+    ]
+  },
+  { 
+    "id": 102, "nome": "Lab 102", "status": "ocupado",
+    "dispositivos": [
+      {
+        "id_dispositivo": 10201, 
+        "nome": "PC1",
+        "tipo": "computador", 
+        "status": "em_uso"
+      }
+    ]
+  }
+]
