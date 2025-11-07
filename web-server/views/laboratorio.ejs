@@ -8,10 +8,16 @@
 
 <body>
     <h1> Laboratorio <%= lab.id %></h1>
+    <div>
+        <h2> Dispositivos </h2>
+        <ul>
+            <% lab.dispositivos.forEach(disp => { %>
+            <li> <%= disp.nome %> - Status: <%= disp.status %> - <a href="/laboratorios/<%= lab.id %>/report/<%= disp.id_dispositivo %>">Reportar Problema</a></li>
+            <% }); %>
+        </ul>
+    </div>
     <ul>
-        <li><a href="/laboratorios/<%= lab.id %>/dispositivos">Dispositivos</a></li>
         <li><a href="/laboratorios/<%= lab.id %>/disponibilidade">Disponibilidade</a></li>
-        <li><a href="/laboratorios/<%= lab.id %>/cadastro/reserva">Cadastro de Reserva</a></li>
         <li><a href="/laboratorios/<%= lab.id %>/avisos">Avisos</a></li>
     </ul>
 </body>

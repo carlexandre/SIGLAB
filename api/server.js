@@ -1,8 +1,13 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
+
 const app = express();
 const PORT = 3001; 
+
+app.use(cors()); // diz para o navegador que essa api é segura
+app.use(express.json()); // para o express entender o json do body
 
 app.get('/api/laboratorios', (req, res) => {
   const labsPath = path.join(__dirname, 'data', 'laboratorios.json');
@@ -74,7 +79,55 @@ app.get('/api/avisos', (req, res) => {
     }
     res.json(JSON.parse(data));
   });
-})
+});
+
+app.post('/api/avisos', (req, res) => {
+  console.log('Recebido no /api/avisos:', req.body);
+  const novoAviso = req.body;
+  const avisosPath = path.join(__dirname, 'data', 'avisos.json');
+
+  if (!novoAviso.titulo || !novoAviso.mensagem || !novoAviso.tipo || !novoAviso.prioridade || !novoAviso.dataInicio) {
+    return res.status(400).json({ message: 'Todos os campos obrigatórios devem ser preenchidos.' });    
+  }
+
+  fs.readFile(avisosPath, 'utf8', (err, data) => {
+    if (err) {
+      // se o arquivo não existir ou der erro, começamos um novo
+      if (err.code === 'ENOENT') {
+        console.log('Arquivo não encontrado, criando novo...');
+        data = '[]'; // começa com um array vazio
+      } else {
+          console.error('Erro ao ler arquivo:', err);
+          return res.status(500).send('Erro interno ao ler dados.');
+      }
+    }
+      
+    let avisos = JSON.parse(data);
+
+    try {
+      avisos = JSON.parse(data);
+      if (!Array.isArray(avisos)) {
+        avisos = [];
+      }
+    } catch (parseErr) {
+        avisos = [];
+    }
+
+    novoAviso.id = Date.now(); 
+    novoAviso.data_publicado = new Date().toISOString();
+    avisos.push(novoAviso);
+
+    fs.writeFile(avisosPath, JSON.stringify(avisos, null, 2), 'utf8', (writeErr) => {
+      if (writeErr) {
+        console.error('Erro ao salvar arquivo:', writeErr);
+        return res.status(500).send('Erro interno ao salvar dados.');
+      }
+
+      console.log('Aviso salvo com sucesso!');
+      res.status(201).json({ message: 'Aviso criado com sucesso!', data: novoAviso });
+    });
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor API rodando na porta ${PORT}`);

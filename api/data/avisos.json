@@ -1,42 +1,65 @@
 [
   {
     "id": "aviso-001",
-    "title": "Manutenção Programada - Servidores",
-    "message": "Os servidores do Laboratório 101 passarão por uma manutenção de rotina para atualização de sistema. O acesso pode ficar instável.",
-    "type": "Manutenção",
-    "priority": "Média",
-    "startDate": "2025-11-10T09:00:00-03:00",
-    "endDate": "2025-11-10T12:00:00-03:00",
-    "targetLabs": ["101"]
+    "titulo": "Manutenção Programada - Servidores",
+    "mensagem": "Os servidores do Laboratório 101 passarão por uma manutenção de rotina para atualização de sistema. O acesso pode ficar instável.",
+    "tipo": "Manutenção",
+    "prioridade": "Média",
+    "dataInicio": "2025-11-10T09:00:00-03:00",
+    "dataFim": "2025-11-10T12:00:00-03:00",
+    "labs": [
+      "101"
+    ]
   },
   {
     "id": "aviso-002",
-    "title": "Atualização de Rede - Todos os Labs",
-    "message": "Haverá uma atualização de segurança nos roteadores centrais. A rede pode ficar indisponível por curtos períodos durante a madrugada.",
-    "type": "Manutenção",
-    "priority": "Alta",
-    "startDate": "2025-11-12T02:00:00-03:00",
-    "endDate": "2025-11-12T04:00:00-03:00",
-    "targetLabs": ["101", "102"]
+    "titulo": "Atualização de Rede - Todos os Labs",
+    "mensagem": "Haverá uma atualização de segurança nos roteadores centrais. A rede pode ficar indisponível por curtos períodos durante a madrugada.",
+    "tipo": "Manutenção",
+    "prioridade": "Alta",
+    "dataInicio": "2025-11-12T02:00:00-03:00",
+    "dataFim": "2025-11-12T04:00:00-03:00",
+    "labs": [
+      "101",
+      "102"
+    ]
   },
   {
     "id": "aviso-003",
-    "title": "Limpeza Geral - Laboratório 102",
-    "message": "O Laboratório 102 estará fechado para limpeza e organização interna na próxima sexta-feira, período da manhã.",
-    "type": "Aviso",
-    "priority": "Baixa",
-    "startDate": "2025-11-14T08:00:00-03:00",
-    "endDate": "2025-11-14T12:00:00-03:00",
-    "targetLabs": ["102"]
+    "titulo": "Limpeza Geral - Laboratório 102",
+    "mensagem": "O Laboratório 102 estará fechado para limpeza e organização interna na próxima sexta-feira, período da manhã.",
+    "tipo": "Aviso",
+    "prioridade": "Baixa",
+    "dataInicio": "2025-11-14T08:00:00-03:00",
+    "dataFim": "2025-11-14T12:00:00-03:00",
+    "labs": [
+      "102"
+    ]
   },
   {
     "id": "aviso-004",
-    "title": "Falta de Energia (URGENTE)",
-    "message": "Foi detectada uma falha elétrica no no-break do Lab 101. Equipamentos desligados por segurança. Equipe de manutenção a caminho.",
-    "type": "Urgente",
-    "priority": "Crítica",
-    "startDate": "2025-11-06T19:30:00-03:00",
-    "endDate": null,
-    "targetLabs": ["101"]
+    "titulo": "Falta de Energia (URGENTE)",
+    "mensagem": "Foi detectada uma falha elétrica no no-break do Lab 101. Equipamentos desligados por segurança. Equipe de manutenção a caminho.",
+    "tipo": "Urgente",
+    "prioridade": "Crítica",
+    "dataInicio": "2025-11-06T19:30:00-03:00",
+    "dataFim": null,
+    "labs": [
+      "101"
+    ]
+  },
+  {
+    "titulo": "Teste",
+    "mensagem": "Teste 123 123 123 123",
+    "tipo": "Manutenção",
+    "prioridade": "Baixa",
+    "dataInicio": "2025-11-10T20:32",
+    "dataFim": null,
+    "labs": [
+      "102",
+      "101"
+    ],
+    "id": 1762558383505,
+    "data": "2025-11-07T23:33:03.506Z"
   }
 ]

@@ -84,21 +84,6 @@ app.get('/laboratorios/:id_lab', async (req, res) => {
   }
 });
 
-app.get('/laboratorios/:id_lab/dispositivos', async (req, res) => {
-  var id = req.params.id_lab;
-  console.log(id);
-  try {
-    var url = `http://localhost:3001/api/laboratorios/${id}`;
-    console.log(url);
-    const apiResponse = await fetch(url);
-    const lab = await apiResponse.json()
-
-    res.render('dispositivos', { lab : lab });
-  } catch (err) {
-    res.status(500).send('Erro ao buscar dados da API.');
-  }
-});
-
 app.get('/laboratorios/:id_lab/disponibilidade', async (req, res) => {
   var id = req.params.id_lab;
   console.log(id);
@@ -153,11 +138,11 @@ app.get('/laboratorios/:id_lab/avisos', async (req, res) => {
     const agora = new Date();
     
     const avisos_filtrados = avisos.filter(aviso => {
-      const filtrolab = aviso.targetLabs.includes(id);
+      const filtrolab = aviso.labs.includes(id);
 
       let aviso_valido = true;
-      if (aviso.endDate) {
-        const data_fim = new Date(aviso.endDate);
+      if (aviso.dataFim) {
+        const data_fim = new Date(aviso.dataFim);
         aviso_valido = data_fim >= agora;
       }
 

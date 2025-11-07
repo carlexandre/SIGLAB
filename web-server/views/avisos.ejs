@@ -81,13 +81,9 @@
 
             <% avisos.forEach(aviso => { %>
                 
-                <%# 
-                  Bloco de lógica EJS para definir a classe CSS 
-                  baseado na string de 'priority'
-                %>
                 <% 
                   let classePrioridade = '';
-                  switch (aviso.priority.toLowerCase()) {
+                  switch (aviso.prioridade.toLowerCase()) {
                     case 'crítica':
                       classePrioridade = 'critica';
                       break;
@@ -107,25 +103,25 @@
                 
                 <div class="aviso-card <%= classePrioridade %>">
                     
-                    <h3><%= aviso.title %></h3>
+                    <h3><%= aviso.titulo %></h3>
                     
-                    <p><%= aviso.message %></p>
+                    <p><%= aviso.mensagem %></p>
 
                     <div class="meta-info">
                         <p>
-                            <strong>Tipo:</strong> <%= aviso.type %> | 
-                            <strong>Prioridade:</strong> <%= aviso.priority %>
+                            <strong>Tipo:</strong> <%= aviso.tipo %> | 
+                            <strong>Prioridade:</strong> <%= aviso.prioridade %>
                         </p>
                         <p>
                             <strong>Início:</strong> 
-                            <%= new Date(aviso.startDate).toLocaleString('pt-BR') %>
+                            <%= new Date(aviso.dataInicio).toLocaleString('pt-BR') %>
                         </p>
 
                         <%# Só exibe a data de término se ela existir (não for null) %>
-                        <% if (aviso.endDate) { %>
+                        <% if (aviso.dataFim) { %>
                             <p>
                                 <strong>Término:</strong> 
-                                <%= new Date(aviso.endDate).toLocaleString('pt-BR') %>
+                                <%= new Date(aviso.dataFim).toLocaleString('pt-BR') %>
                             </p>
                         <% } %>
                     </div>

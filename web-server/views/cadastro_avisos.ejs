@@ -6,6 +6,118 @@
     <title>Cadastro de Avisos</title>
 </head>
 
-<h1>Cadastro de Avisos</h1>
+<body>
+    <h1>Novo Aviso</h1>
+    
+    <form id="form-aviso">
+    
+        <div>
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
+        </div>
+        
+        <div>
+            <label for="mensagem">Mensagem (Descrição):</label>
+            <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+        </div>
 
+        <div>
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="">Selecione um tipo...</option>
+                <option value="Manutenção">Manutenção</option>
+                <option value="Informativo">Informativo</option>
+                <option value="Alerta">Alerta</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="prioridade">Prioridade:</label>
+            <select id="prioridade" name="prioridade" required>
+                <option value="">Selecione a prioridade...</option>
+                <option value="Baixa">Baixa</option>
+                <option value="Média">Média</option>
+                <option value="Alta">Alta</option>
+                <option value="Crítica">Crítica</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="dataInicio">Início do Aviso:</label>
+            <input type="datetime-local" id="dataInicio" name="dataInicio" required>
+        </div>
+        
+        <div>
+            <label for="dataFim">Fim do Aviso:</label>
+            <input type="datetime-local" id="dataFim" name="dataFim">
+        </div>
+
+        <div>
+            <label for="labs">Laboratórios (separados por vírgula):</label>
+            <input type="text" id="labs" name="labs" placeholder="Ex: 101, 102, 205">
+        </div>
+
+        <button type="submit">Salvar Aviso</button>
+    </form>
+    
+    <p id="feedback"></p>
+
+    <script>
+        document.getElementById('form-aviso').addEventListener('submit', async (event) => {
+        
+            event.preventDefault(); // impede o recarregamento padrão da página
+            
+            const feedbackEl = document.getElementById('feedback');
+            feedbackEl.textContent = 'Enviando...';
+
+            const titulo = document.getElementById('titulo').value;
+            const mensagem = document.getElementById('mensagem').value;
+            const tipo = document.getElementById('tipo').value;
+            const prioridade = document.getElementById('prioridade').value;
+            const dataInicio = document.getElementById('dataInicio').value;
+            const dataFim = document.getElementById('dataFim')?.value || null;
+            const labsInput = document.getElementById('labs').value; // ex: "101, 102"
+
+            const labsArray = labsInput.split(',')
+                                    .map(lab => lab.trim()) // remove espaços
+                                    .filter(lab => lab.length > 0); // remove itens vazios
+
+            // json)
+            const dados = {
+                titulo: titulo,
+                mensagem: mensagem,
+                tipo: tipo,
+                prioridade: prioridade,
+                dataInicio: dataInicio,
+                dataFim: dataFim,
+                labs: labsArray
+            };
+
+            try {
+                const response = await fetch('http://localhost:3001/api/avisos', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify(dados) // converte o objeto JS em string JSON
+                });
+
+                if (response.ok) {
+                    feedbackEl.textContent = 'Aviso salvo com sucesso!';
+                    feedbackEl.style.color = 'green';
+                    document.getElementById('form-aviso').reset(); // limpa o formulário
+                } else {
+                    const erroData = await response.json();
+                    feedbackEl.textContent = `Erro: ${erroData.message || 'Não foi possível salvar'}`;
+                    feedbackEl.style.color = 'red';
+                }
+
+            } catch (error) {
+                console.error('Erro de rede:', error);
+                feedbackEl.textContent = 'Erro de conexão. A API está online?';
+                feedbackEl.style.color = 'red';
+            }
+        });
+    </script>
+</body>
 </html>
