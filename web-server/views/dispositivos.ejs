@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispositivos</title>
+</head>
+
+<body> 
+    <h1> Laboratorio <%= lab.id %></h1>
+    <ul>
+        <% lab.dispositivos.forEach(disp => { %>
+        <li> <%= disp.nome %> - Status: <%= disp.status %> - <a href="/laboratorios/<%= lab.id %>/report/<%= disp.id_dispositivo %>">Reportar Problema</a></li>
+        <% }); %>
+    </ul>
+</body>
+
+</html>

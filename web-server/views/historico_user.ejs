@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico Usuários</title>
+</head>
+
+<body>
+  <h1> Histórico Usuários</h1>
+  <ul>
+    <% usuarios.forEach(user => { %>
+      <li>Laboratório: <%= user.id_lab %> | Dispositivo: <%= user.id_dispositivo %> - <%= user.name_disp %> | ID Usuário: <%= user.id_user %> | Nome: <%= user.usuario %> | Data: <%= new Date(user.data).toLocaleString('pt-BR') %></li> 
+    <% }); %>
+  </ul>
+</body>
+
+</html>

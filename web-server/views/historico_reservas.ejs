@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico Reservas</title>
+</head>
+
+<body>
+  <h1> Histórico - Reservas</h1>
+  <div>
+    <h2>Próximas Reservas</h2>
+    <ul>
+    <% proximas.forEach(res => { %>
+      <li>Laboratório: <%= res.id_lab %> | ID Usuário: <%= res.id_servidor %> | Nome: <%= res.name %> | Data: <%= new Date(res.data).toLocaleString('pt-BR') %></li> 
+    <% }); %>
+  </ul>
+  </div>
+  <div>
+    <h2>Reservas Passadas</h2>
+    <ul>
+    <% passadas.forEach(res => { %>
+      <li>Laboratório: <%= res.id_lab %> | ID Usuário: <%= res.id_servidor %> | Nome: <%= res.name %> | Data: <%= new Date(res.data).toLocaleString('pt-BR') %></li> 
+    <% }); %>
+  </ul>
+  </div>
+</body>
+
+</html>

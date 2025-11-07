@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avisos do Laboratório</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .aviso-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .aviso-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            /* A borda esquerda grossa define a cor da prioridade */
+            border-left: 8px solid #ccc; 
+        }
+        .aviso-card h3 {
+            margin-top: 0;
+            color: #111;
+        }
+        .aviso-card p {
+            line-height: 1.6;
+            color: #555;
+        }
+        .aviso-card .meta-info {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 15px;
+            border-top: 1px dashed #eee;
+            padding-top: 10px;
+        }
+        .aviso-card .meta-info strong {
+            color: #444;
+        }
+
+        /* ----- Cores da Prioridade ----- */
+        .aviso-card.critica {
+            border-left-color: #d9534f; /* Vermelho */
+        }
+        .aviso-card.critica h3 {
+            color: #d9534f;
+        }
+
+        .aviso-card.alta {
+            border-left-color: #f0ad4e; /* Laranja */
+        }
+
+        .aviso-card.media {
+            border-left-color: #0275d8; /* Azul */
+        }
+
+        .aviso-card.baixa {
+            border-left-color: #5cb85c; /* Verde */
+        }
+
+        .sem-avisos {
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aviso-container">
+        <h2>Avisos Ativos</h2>
+
+        <% if (avisos && avisos.length > 0) { %>
+
+            <% avisos.forEach(aviso => { %>
+                
+                <%# 
+                  Bloco de lógica EJS para definir a classe CSS 
+                  baseado na string de 'priority'
+                %>
+                <% 
+                  let classePrioridade = '';
+                  switch (aviso.priority.toLowerCase()) {
+                    case 'crítica':
+                      classePrioridade = 'critica';
+                      break;
+                    case 'alta':
+                      classePrioridade = 'alta';
+                      break;
+                    case 'média':
+                      classePrioridade = 'media';
+                      break;
+                    case 'baixa':
+                      classePrioridade = 'baixa';
+                      break;
+                    default:
+                      classePrioridade = 'media';
+                  }
+                %>
+                
+                <div class="aviso-card <%= classePrioridade %>">
+                    
+                    <h3><%= aviso.title %></h3>
+                    
+                    <p><%= aviso.message %></p>
+
+                    <div class="meta-info">
+                        <p>
+                            <strong>Tipo:</strong> <%= aviso.type %> | 
+                            <strong>Prioridade:</strong> <%= aviso.priority %>
+                        </p>
+                        <p>
+                            <strong>Início:</strong> 
+                            <%= new Date(aviso.startDate).toLocaleString('pt-BR') %>
+                        </p>
+
+                        <%# Só exibe a data de término se ela existir (não for null) %>
+                        <% if (aviso.endDate) { %>
+                            <p>
+                                <strong>Término:</strong> 
+                                <%= new Date(aviso.endDate).toLocaleString('pt-BR') %>
+                            </p>
+                        <% } %>
+                    </div>
+                </div>
+
+            <% }) %>
+
+        <% } else { %>
+            <%# Mensagem exibida se o array 'avisos' estiver vazio %> 
+            <p class="sem-avisos">Nenhum aviso ativo no momento.</p>
+        <% } %>
+
+    </div>
+
+</body>
+</html>

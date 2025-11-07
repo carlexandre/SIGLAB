@@ -17,11 +17,7 @@ app.get('/api/laboratorios', (req, res) => {
 
 app.get('/api/laboratorios/:id', (req, res) => {
   const labsPath = path.join(__dirname, 'data', 'laboratorios.json');
-  const idBuscado = parseInt(req.params.id);
-
-  if (isNaN(idBuscado)) {
-    return res.status(400).send('ID inválido.');
-  }
+  const idBuscado = req.params.id;
 
   fs.readFile(labsPath, 'utf8', (err, data) => {
     if (err) {
@@ -42,6 +38,43 @@ app.get('/api/laboratorios/:id', (req, res) => {
     }
   });
 });
+
+app.get('/api/historico/:tipo', (req, res) => {
+  const tipo = req.params.tipo;
+  if(tipo === "usuarios"){
+    const histPath = path.join(__dirname, 'data', 'hist_users.json');
+    fs.readFile(histPath, 'utf8', (err, data) => {
+      if (err) {
+        return res.status(500).send('Erro ao ler o arquivo de dados.');
+      }
+      res.json(JSON.parse(data));
+    });
+
+  }else if (tipo === "reservas"){
+    const histPath = path.join(__dirname, 'data', 'reservas.json');
+
+    fs.readFile(histPath, 'utf8', (err, data) => {
+      if (err) {
+        return res.status(500).send('Erro ao ler o arquivo de dados.');
+      }
+      res.json(JSON.parse(data));
+    });
+
+  }else{
+    return res.status(404).send('Página não encontrada.');
+  }
+});
+
+app.get('/api/avisos', (req, res) => {
+  const avisos = path.join(__dirname, 'data', 'avisos.json');
+
+  fs.readFile(avisos, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Erro ao ler o arquivo de dados.');
+    }
+    res.json(JSON.parse(data));
+  });
+})
 
 app.listen(PORT, () => {
   console.log(`Servidor API rodando na porta ${PORT}`);
