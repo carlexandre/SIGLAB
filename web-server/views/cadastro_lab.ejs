@@ -3,9 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Laboratório</title>
+    <title>SIGLAB: Cadastro de Laboratório</title>
+    
+    <link href="/css/cadastro.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #000000;
+            --main-green: #00ff41;
+            --dim-green: #008F11;
+            --alert-pink: #ff00ff;
+            --ui-gray: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
 
-<h1>Cadastro de Laboratório</h1>
+<%- include('partials/header') %>
 
+<body>
+    <main class="main-container">
+
+        <h2 class="titulo-pagina">Novo Laboratório</h2>
+        
+        <form id="form-lab" class="form-cadastro">
+        
+            <div class="form-group">
+                <label for="nome">Nome do Laboratório:</label>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Laboratório de Redes I" required>
+            </div>
+
+            <div class="form-group">
+                <label for="localizacao">Localização (Bloco/Sala):</label>
+                <input type="text" id="localizacao" name="localizacao" placeholder="Ex: Bloco C - Sala 101" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="capacidade">Capacidade (Pessoas):</label>
+                <input type="number" id="capacidade" name="capacidade" min="1" placeholder="Ex: 30" required>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status Atual:</label>
+                <select id="status" name="status" required>
+                    <option value="Disponível">Disponível</option>
+                    <option value="Manutenção">Em Manutenção</option>
+                    <option value="Reservado">Reservado</option>
+                    <option value="Inativo">Inativo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição / Equipamentos:</label>
+                <textarea id="descricao" name="descricao" rows="4" placeholder="Descreva os equipamentos (Ex: 20 PCs i5, Projetor, Quadro Branco)..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-pixel">💾 CADASTRAR LABORATÓRIO</button>
+        </form>
+        
+        <!-- Área de Feedback Visual -->
+        <div style="margin-top: 20px; text-align: center; font-family: 'Press Start 2P', monospace;">
+            <p id="feedback"></p>
+        </div>
+
+    </main>
+</body>
+
+<%- include('partials/footer') %>
+
+<script>
+    document.getElementById('form-lab').addEventListener('submit', async (event) => {
+    
+        event.preventDefault();
+        
+        const feedbackEl = document.getElementById('feedback');
+        feedbackEl.textContent = 'Processando dados...';
+        feedbackEl.style.color = '#ffff00'; // Amarelo Loading
+
+        const form = event.target;
+        
+        // Coleta de dados do formulário
+        const dados = {
+            nome: form.nome.value,
+            localizacao: form.localizacao.value,
+            capacidade: parseInt(form.capacidade.value),
+            status: form.status.value,
+            descricao: form.descricao.value
+        };
+
+        try {
+            // Ajuste a URL da API conforme sua rota de backend
+            const response = await fetch('http://localhost:3001/api/laboratorios', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            if (response.ok) {
+                feedbackEl.textContent = 'Laboratório cadastrado!';
+                feedbackEl.style.color = '#00FF00'; // Verde Sucesso
+                form.reset();
+            } else {
+                const erroData = await response.json();
+                feedbackEl.textContent = `Erro: ${erroData.message || 'Falha ao cadastrar'}`;
+                feedbackEl.style.color = '#ff5555'; // Vermelho Erro
+            }
+
+        } catch (error) {
+            console.error('Erro:', error);
+            feedbackEl.textContent = 'Erro de conexão com o servidor.';
+            feedbackEl.style.color = '#ff5555';
+        }
+    });
+</script>
 </html>

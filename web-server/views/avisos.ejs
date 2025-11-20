@@ -3,138 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avisos do Laboratório</title>
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        h2 {
-            color: #333;
-        }
-        .aviso-container {
-            max-width: 800px;
-            margin: auto;
-        }
-        .aviso-card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            padding: 20px;
-            /* A borda esquerda grossa define a cor da prioridade */
-            border-left: 8px solid #ccc; 
-        }
-        .aviso-card h3 {
-            margin-top: 0;
-            color: #111;
-        }
-        .aviso-card p {
-            line-height: 1.6;
-            color: #555;
-        }
-        .aviso-card .meta-info {
-            font-size: 0.9em;
-            color: #777;
-            margin-top: 15px;
-            border-top: 1px dashed #eee;
-            padding-top: 10px;
-        }
-        .aviso-card .meta-info strong {
-            color: #444;
-        }
+    <title>SIGLAB - Avisos</title>
 
-        /* ----- Cores da Prioridade ----- */
-        .aviso-card.critica {
-            border-left-color: #d9534f; /* Vermelho */
-        }
-        .aviso-card.critica h3 {
-            color: #d9534f;
-        }
+    <link href="/css/avisos.css" rel="stylesheet">
 
-        .aviso-card.alta {
-            border-left-color: #f0ad4e; /* Laranja */
-        }
-
-        .aviso-card.media {
-            border-left-color: #0275d8; /* Azul */
-        }
-
-        .aviso-card.baixa {
-            border-left-color: #5cb85c; /* Verde */
-        }
-
-        .sem-avisos {
-            color: #777;
-            font-style: italic;
-        }
-    </style>
 </head>
 <body>
 
-    <div class="aviso-container">
-        <h2>Avisos Ativos</h2>
+    <%- include('partials/header') %> 
 
-        <% if (avisos && avisos.length > 0) { %>
+    <main>
+        <h1 class="titulo-pagina">Avisos do Laboratório</h1>
 
-            <% avisos.forEach(aviso => { %>
-                
-                <% 
-                  let classePrioridade = '';
-                  switch (aviso.prioridade.toLowerCase()) {
-                    case 'crítica':
-                      classePrioridade = 'critica';
-                      break;
-                    case 'alta':
-                      classePrioridade = 'alta';
-                      break;
-                    case 'média':
-                      classePrioridade = 'media';
-                      break;
-                    case 'baixa':
-                      classePrioridade = 'baixa';
-                      break;
-                    default:
-                      classePrioridade = 'media';
-                  }
-                %>
-                
-                <div class="aviso-card <%= classePrioridade %>">
+        <div class="aviso-container">
+
+            <% if (avisos && avisos.length > 0) { %>
+
+                <% avisos.forEach(aviso => { %>
                     
-                    <h3><%= aviso.titulo %></h3>
+                    <% 
+                        // Lógica EJS para definir a classe de prioridade
+                        let classePrioridade = '';
+                        switch (aviso.prioridade.toLowerCase()) {
+                            case 'crítica':
+                                classePrioridade = 'critica';
+                                break;
+                            case 'alta':
+                                classePrioridade = 'alta';
+                                break;
+                            case 'média':
+                                classePrioridade = 'media';
+                                break;
+                            case 'baixa':
+                                classePrioridade = 'baixa';
+                                break;
+                            default:
+                                classePrioridade = 'media'; // Padrão
+                        }
+                    %>
                     
-                    <p><%= aviso.mensagem %></p>
+                    <div class="aviso-card <%= classePrioridade %>">
+                        
+                        <h3><%= aviso.titulo %></h3>
+                        
+                        <p><%= aviso.mensagem %></p>
 
-                    <div class="meta-info">
-                        <p>
-                            <strong>Tipo:</strong> <%= aviso.tipo %> | 
-                            <strong>Prioridade:</strong> <%= aviso.prioridade %>
-                        </p>
-                        <p>
-                            <strong>Início:</strong> 
-                            <%= new Date(aviso.dataInicio).toLocaleString('pt-BR') %>
-                        </p>
-
-                        <%# Só exibe a data de término se ela existir (não for null) %>
-                        <% if (aviso.dataFim) { %>
+                        <div class="meta-info">
                             <p>
-                                <strong>Término:</strong> 
-                                <%= new Date(aviso.dataFim).toLocaleString('pt-BR') %>
+                                <strong>Tipo:</strong> <%= aviso.tipo %> | 
+                                <strong>Prioridade:</strong> <%= aviso.prioridade %>
                             </p>
-                        <% } %>
+                            <p>
+                                <strong>Início:</strong> 
+                                <%= new Date(aviso.dataInicio).toLocaleString('pt-BR') %>
+                            </p>
+
+                            <%# Só exibe a data de término se ela existir (não for null) %>
+                            <% if (aviso.dataFim) { %>
+                                <p>
+                                    <strong>Término:</strong> 
+                                    <%= new Date(aviso.dataFim).toLocaleString('pt-BR') %>
+                                </p>
+                            <% } %>
+                        </div>
                     </div>
-                </div>
 
-            <% }) %>
+                <% }) %>
 
-        <% } else { %>
-            <%# Mensagem exibida se o array 'avisos' estiver vazio %> 
-            <p class="sem-avisos">Nenhum aviso ativo no momento.</p>
-        <% } %>
+            <% } else { %>
+                <%# Mensagem exibida se o array 'avisos' estiver vazio %> 
+                <p class="sem-avisos">Nenhum aviso ativo no momento.</p>
+            <% } %>
 
-    </div>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %> 
 
 </body>
 </html>

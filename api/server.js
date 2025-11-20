@@ -95,7 +95,7 @@ app.post('/api/avisos', (req, res) => {
       // se o arquivo não existir ou der erro, começamos um novo
       if (err.code === 'ENOENT') {
         console.log('Arquivo não encontrado, criando novo...');
-        data = '[]'; // começa com um array vazio
+        data = '[]';
       } else {
           console.error('Erro ao ler arquivo:', err);
           return res.status(500).send('Erro interno ao ler dados.');

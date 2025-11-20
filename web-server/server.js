@@ -20,35 +20,30 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/historico', async (req, res) => {
-  res.render('historicos')
-})
-
-app.get('/historico/:tipo', async (req, res) => {
-  var tipo = req.params.tipo;
-  console.log(tipo);
   try {
-    var url = `http://localhost:3001/api/historico/${tipo}`;
-    console.log(url);
-    const apiResponse = await fetch(url);
-    const historico = await apiResponse.json()
+    var url_reservas = `http://localhost:3001/api/historico/reservas`;
+    console.log(url_reservas);
+    const apiResponseReservas = await fetch(url_reservas);
+    const historico_reservas = await apiResponseReservas.json()
 
-    if(tipo === "reservas"){
-      const agora = new Date();
+    const agora = new Date();
 
-      const next_reservas = historico.filter(reserva => {
-        const data_reserva = new Date(reserva.data);
-        return data_reserva >= agora;
-      });
+    const next_reservas = historico_reservas.filter(reserva => {
+      const data_reserva = new Date(reserva.data);
+      return data_reserva >= agora;
+    });
 
-      const last_reservas = historico.filter(reserva => {
-        const data_reserva = new Date(reserva.data);
-        return data_reserva < agora;
-      });
+    const last_reservas = historico_reservas.filter(reserva => {
+      const data_reserva = new Date(reserva.data);
+      return data_reserva < agora;
+    });
 
-      res.render('historico_reservas', { proximas : next_reservas, passadas: last_reservas });
+    var url_user = `http://localhost:3001/api/historico/usuarios`;
+    console.log(url_user);
+    const apiResponseUser = await fetch(url_user);
+    const historico_user = await apiResponseUser.json()
 
-    }else if(tipo === "usuarios")
-    res.render('historico_user', { usuarios : historico });
+    res.render('historicos', { proximas : next_reservas, passadas: last_reservas, usuarios : historico_user });
 
   } catch (err) {
     res.status(500).send('Erro ao buscar dados da API.');
@@ -158,7 +153,7 @@ app.get('/laboratorios/:id_lab/avisos', async (req, res) => {
 app.get('/laboratorios/:id_lab/cadastro/reserva', async(req, res) => {
   var id = req.params.id_lab;
   console.log(id);
-  res.render('cadastro_reserva');
+  res.render('cadastro_reserva', { lab_id: id, lab_nome: `Lab ${id}` });
 })
 
 app.get('/cadastro/avisos', async (req, res) => {
@@ -179,8 +174,36 @@ app.get('/laboratorios/:id_lab/report/:id_dispositivo', async(req, res) => {
   res.render('cadastro_report', { id_dispositivo : id_dispositivo, id_lab : id_lab });
 });
 
-app.get('/chamados', async (req, res) => {
-  res.render('chamados');
+app.get('/chamados', (req, res) => {
+    
+    // Simulando dados do banco
+    const dadosDoBanco = [
+        {
+            id: 1,
+            id_lab: "LAB-03",
+            id_dispositivo: "PC-12",
+            titulo: "Monitor piscando",
+            tipo_problema: "hardware",
+            gravidade: "media",
+            descricao: "Imagem some a cada 30s.",
+            status: "aberto",
+            anotacoes: ""
+        },
+        {
+            id: 2,
+            id_lab: "LAB-01",
+            id_dispositivo: "PC-05",
+            titulo: "Sem internet",
+            tipo_problema: "rede",
+            gravidade: "alta",
+            descricao: "Cabo rompido.",
+            status: "resolvido",
+            anotacoes: "Cabo RJ45 substituído em 20/11."
+        }
+    ];
+
+    // Renderiza o EJS passando a lista
+    res.render('chamados', { listaChamados: dadosDoBanco });
 });
 
 app.listen(PORT, () => {

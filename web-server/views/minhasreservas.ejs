@@ -3,27 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Reservas</title>
+    <title>SIGLAB - Minhas Reservas</title>
+
+    <link href="/css/historicos.css" rel="stylesheet">
 </head>
 
 <body>
-    <h1> Minhas Reservas</h1>
-    <div>
-    <h2>Próximas Reservas</h2>
-    <ul>
-    <% proximas.forEach(res => { %>
-        <li>Laboratório: <%= res.id_lab %> | ID Usuário: <%= res.id_servidor %> | Nome: <%= res.name %> | Data: <%= new Date(res.data).toLocaleString('pt-BR') %></li> 
-    <% }); %>
-    </ul>
-    </div>
-    <div>
-    <h2>Reservas Passadas</h2>
-    <ul>
-    <% passadas.forEach(res => { %>
-        <li>Laboratório: <%= res.id_lab %> | ID Usuário: <%= res.id_servidor %> | Nome: <%= res.name %> | Data: <%= new Date(res.data).toLocaleString('pt-BR') %></li> 
-    <% }); %>
-    </ul>
-    </div>
-</body>
+    <%- include('partials/header') %> 
 
+    <main>
+        <h1 class="titulo-pagina">Minhas Reservas</h1>
+
+        <div class="content-container">
+
+            <div class="tab-content active">
+            
+                <h2 class="content-subtitle">Próximas Reservas</h2>
+                <ul class="history-list">
+                    <% if (proximas && proximas.length > 0) { %>
+                        <% proximas.forEach(res => { %>
+                            <li>
+                                <strong>Lab:</strong> <%= res.id_lab %> | 
+                                <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
+                                <strong>Data:</strong> <%= new Date(res.data).toLocaleString('pt-BR') %>
+                            </li> 
+                        <% }); %>
+                    <% } else { %>
+                        <li>Nenhuma reserva futura encontrada.</li>
+                    <% } %>
+                </ul>
+                
+                <h2 class="content-subtitle">Reservas Passadas</h2>
+                <ul class="history-list">
+                    <% if (passadas && passadas.length > 0) { %>
+                        <% passadas.forEach(res => { %>
+                            <li>
+                                <strong>Lab:</strong> <%= res.id_lab %> | 
+                                <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
+                                <strong>Data:</strong> <%= new Date(res.data).toLocaleString('pt-BR') %>
+                            </li> 
+                        <% }); %>
+                    <% } else { %>
+                        <li>Nenhuma reserva passada encontrada.</li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <%- include('partials/footer') %> 
+
+</body>
 </html>

@@ -3,13 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Históricos</title>
+    <title>SIGLAB - Histórico</title>
+    
+    <link href="/css/historicos.css" rel="stylesheet">
+
 </head>
 
 <body>
-    <h1> Histórico </h1>
-    <ul>
-        <li><a href="/historico/usuarios">Usuários</a></li>
-        <li><a href="/historico/reservas">Reservas</a></li>
-    </ul>
+    <%- include('partials/header') %> 
+
+    <main>
+        <h1 class="titulo-pagina">Histórico</h1>
+
+        <!-- navegação das abas -->
+        <div class="tab-nav">
+            <button class="tab-link active" data-target="reservas">Histórico de Reservas</button>
+            <button class="tab-link" data-target="usuarios">Histórico de Uso</button>
+        </div>
+
+        <!-- conteúdo das abas -->
+
+        <!-- aba de reservas -->
+        <div class="tab-content active" id="reservas">
+            
+            <h2 class="content-subtitle">Próximas Reservas</h2>
+            <ul class="history-list">
+                <% if (proximas && proximas.length > 0) { %>
+                    <% proximas.forEach(res => { %>
+                        <li>
+                            <strong>Lab:</strong> <%= res.id_lab %> | 
+                            <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
+                            <strong>Data:</strong> <%= new Date(res.data).toLocaleString('pt-BR') %>
+                        </li> 
+                    <% }); %>
+                <% } else { %>
+                    <li>Nenhuma reserva futura encontrada.</li>
+                <% } %>
+            </ul>
+          
+            <h2 class="content-subtitle">Reservas Passadas</h2>
+            <ul class="history-list">
+                <% if (passadas && passadas.length > 0) { %>
+                    <% passadas.forEach(res => { %>
+                        <li>
+                            <strong>Lab:</strong> <%= res.id_lab %> | 
+                            <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
+                            <strong>Data:</strong> <%= new Date(res.data).toLocaleString('pt-BR') %>
+                        </li> 
+                    <% }); %>
+                <% } else { %>
+                    <li>Nenhuma reserva passada encontrada.</li>
+                <% } %>
+            </ul>
+        </div>
+
+        <!-- aba de usuários -->
+        <div class="tab-content" id="usuarios">
+            
+            <h2 class="content-subtitle">Histórico de Utilização por Usuário</h2>
+            <ul class="history-list">
+                <% if (usuarios && usuarios.length > 0) { %>
+                    <% usuarios.forEach(user => { %>
+                        <li>
+                            <strong>Lab:</strong> <%= user.id_lab %> | 
+                            <strong>Dispositivo:</strong> <%= user.name_disp %> (<%= user.id_dispositivo %>) | 
+                            <strong>Usuário:</strong> <%= user.usuario %> (<%= user.id_user %>) | 
+                            <strong>Data:</strong> <%= new Date(user.data).toLocaleString('pt-BR') %>
+                        </li> 
+                    <% }); %>
+                <% } else { %>
+                    <li>Nenhum histórico de uso encontrado.</li>
+                <% } %>
+            </ul>
+        </div>
+
+    </main>
+
+    <%- include('partials/footer') %> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    // Pega o ID do alvo (ex: 'reservas')
+                    const targetId = link.getAttribute('data-target');
+
+                    // Remove 'active' de todos os links e conteúdos
+                    tabLinks.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    // Adiciona 'active' ao link clicado
+                    link.classList.add('active');
+                    
+                    // Adiciona 'active' ao conteúdo correspondente
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
+</html>

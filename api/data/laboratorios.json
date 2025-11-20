@@ -1,6 +1,6 @@
 [
   { 
-    "id": "101", "nome": "Lab 101", "status": "livre",
+    "id": "101", "nome": "Lab 101", "status": "livre", "localizacao": "Bloco 910 - Lab 101",
     "dispositivos": [
       {
         "id_dispositivo": "10101",
@@ -23,7 +23,7 @@
     ]
   },
   { 
-    "id": "102", "nome": "Lab 102", "status": "ocupado",
+    "id": "102", "nome": "Lab 102", "status": "inativo", "localizacao": "Bloco 910 - Lab 102",
     "dispositivos": [
       {
         "id_dispositivo": "10201", 
