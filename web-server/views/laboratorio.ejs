@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>SIGLAB - Laboratório <%= lab.id %></title>
+    
+    <link href="/css/laboratorios.css" rel="stylesheet">
+</head>
+
+<body>
+    
+    <%- include('partials/header') %> 
+
+    <main>
+        <h1 class="titulo-pagina">Laboratório <%= lab.id %></h1>
+
+        <p class="subtitulo-localizacao">
+            <%= lab.localizacao %>
+        </p>
+
+        <!-- painéis de informação (disponibilidade/avisos) -->
+        <div class="info-panels-container">
+            
+            <a href="/laboratorios/<%= lab.id %>/disponibilidade" class="info-card-link">
+                <div class="info-card">
+                    <h2>Disponibilidade</h2>
+                </div>
+            </a>
+            
+            <a href="/laboratorios/<%= lab.id %>/avisos" class="info-card-link">
+                <div class="info-card">
+                    <h2>Avisos</h2>
+                </div>
+            </a>
+        </div>
+
+        <!-- container da topologia -->
+        <div class="topology-container">
+            <h2>Topologia do Laboratório</h2>
+            
+            <div class="topology-map">
+                <!-- 
+                  looping EJS para listar os dispositivos 
+                  (por enquanto, eles vão aparecer em sequência. 
+                  o posicionamento (x, y) viria do DB no futuro para o drag-and-drop)
+                -->
+                <% lab.dispositivos.forEach(disp => { %>
+                    
+                    <div class="device">
+                        
+                        <span class="device-icon">
+                            <% if (disp.tipo === 'projetor') { %>
+                                📽️ <!-- projetor -->
+                            <% } else if (disp.tipo === 'impressora') { %>
+                                🖨️ <!-- impressora -->
+                            <% } else { %>
+                                🖥️ <!-- computador -->
+                            <% } %>
+                        </span>
+                        
+                        <div class="tooltip">
+                            <div class="tooltip-content">
+                                <p><strong>Dispositivo:</strong> <%= disp.nome %></p>
+                                <p><strong>Status:</strong> <%= disp.status %></p>
+                                <a href="/laboratorios/<%= lab.id %>/report/<%= disp.id_dispositivo %>">Reportar Problema</a>
+                            </div>
+                        </div>
+                    </div>
+                
+                <% }); %>
+            </div>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %> 
+
+</body>
+</html>

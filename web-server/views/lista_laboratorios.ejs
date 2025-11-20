@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratórios</title>
+    
+    <link href="/css/lista-laboratorios.css" rel="stylesheet">
+
+    <style>
+      :root {
+          --main-green: #00FF00;
+          --dim-green: #008000;
+          --ui-gray: #1a1a1a;
+          --alert-pink: #ff00ff;
+          --alert-orange: #f0ad4e;
+          --info-blue: #0275d8;
+      }
+
+      body {
+          background-color: #000;
+          color: var(--main-green);
+          font-family: 'Courier New', Courier, monospace;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+      }
+    </style>
+</head>
+
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <h1>Laboratórios</h1>
+    <% laboratorios.forEach(lab => { %>
+    <ul class="lab-list">         
+      <li>
+        <a href="/laboratorios/<%= lab.id %>" class="border-status-<%= lab.status %>">
+          <span class="lab-icon">🖥️</span>
+          <span class="lab-name"><%= lab.nome %></span>
+          <span class="lab-status status-<%= lab.status %>">Status: <%= lab.status %></span>
+        </a>
+      </li> 
+    </ul>
+    <% }); %>
+
+    <a href="/cadastro/laboratorios" class="link-novo">
+        [+] Novo Laboratório
+    </a>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>

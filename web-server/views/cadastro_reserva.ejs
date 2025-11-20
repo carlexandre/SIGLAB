@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGLAB: Nova Reserva</title>
+    
+    <link href="/css/cadastro.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #000000;
+            --main-green: #00ff41;
+            --dim-green: #008F11;
+            --alert-pink: #ff00ff;
+            --ui-gray: #1a1a1a;
+        }
+
+        input::-webkit-inner-spin-button, 
+        input::-webkit-calendar-picker-indicator {
+            filter: invert(1) sepia(1) saturate(5) hue-rotate(90deg);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<%- include('partials/header') %>
+
+<body>
+    <main class="main-container">
+
+        <h2 class="titulo-pagina">Agendar Laboratório</h2>
+        
+        <form id="form-reserva" class="form-cadastro">
+        
+            <div class="form-group">
+                <label for="id_lab">Laboratório:</label>
+                <select id="id_lab" name="id_lab" required>
+                    <option value="">Selecione...</option>
+                    <!-- Exemplo estático baseados no seu JSON, mas poderia vir do banco -->
+                    <option value="101">Lab 101 - Redes</option>
+                    <option value="102">Lab 102 - Desenvolvimento</option>
+                    <option value="205">Lab 205 - Hardware</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="id_servidor">ID do Servidor:</label>
+                <input type="number" id="id_servidor" name="id_servidor" placeholder="Ex: 564960" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Nome do Responsável:</label>
+                <input type="text" id="name" name="name" placeholder="Ex: Miguel" required>
+            </div>
+
+            <div class="form-group">
+                <label for="data_inicio">Data e Hora de Início:</label>
+                <input type="datetime-local" id="data_inicio" name="data_inicio" required>
+            </div>
+
+            <div class="form-group">
+                <label for="data_fim">Data e Hora de Término:</label>
+                <input type="datetime-local" id="data_fim" name="data_fim" required>
+            </div>
+
+            <div class="form-group">
+                <label for="motivo">Motivo da Reserva:</label>
+                <textarea id="motivo" name="motivo" rows="3" placeholder="Ex: Aula de Banco de Dados..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-pixel">📅 CONFIRMAR RESERVA</button>
+        </form>
+
+    </main>
+</body>
+
+<%- include('partials/footer') %>
+
+<script>
+    document.getElementById('form-reserva').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const feedbackEl = document.getElementById('feedback');
+        const form = event.target;
+
+        // Pegando valores
+        const id_lab = form.id_lab.value;
+        const id_servidor = form.id_servidor.value;
+        const name = form.name.value;
+        const data_inicio = form.data_inicio.value;
+        const data_fim = form.data_fim.value;
+        const motivo = form.motivo.value;
+
+        // Validação simples de data
+        if (new Date(data_inicio) >= new Date(data_fim)) {
+            feedbackEl.textContent = 'ERRO: A data final deve ser posterior à data inicial.';
+            feedbackEl.style.color = '#ff00ff'; // Rosa alerta
+            return;
+        }
+
+        feedbackEl.textContent = 'Processando agendamento...';
+        feedbackEl.style.color = '#ffff00';
+
+        const dados = {
+            id_lab,
+            id_servidor,
+            name,
+            data: data_inicio, // Mantendo padrão do seu JSON
+            data_fim: data_fim, // Campo novo solicitado
+            motivo
+        };
+
+        try {
+            // Exemplo de POST
+            const response = await fetch('http://localhost:3001/api/reservas', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            if (response.ok) {
+                feedbackEl.textContent = 'Reserva confirmada com sucesso!';
+                feedbackEl.style.color = '#00FF00';
+                form.reset();
+            } else {
+                const erroData = await response.json();
+                feedbackEl.textContent = `Erro: ${erroData.message || 'Conflito de horário ou falha.'}`;
+                feedbackEl.style.color = '#ff5555';
+            }
+
+        } catch (error) {
+            console.error('Erro:', error);
+            feedbackEl.textContent = 'Erro de conexão com o servidor.';
+            feedbackEl.style.color = '#ff5555';
+        }
+    });
+</script>
+</html>

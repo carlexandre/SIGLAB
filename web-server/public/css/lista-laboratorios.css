@@ -1,0 +1,142 @@
+main {
+  flex: 1;
+  padding: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 4rem;
+  text-shadow: 0 0 5px var(--main-green);
+}
+
+.lab-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lab-list li {
+  margin-bottom: 15px;
+}
+
+.lab-list li a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  text-decoration: none;
+  color: var(--main-green);
+  border: 1px solid var(--main-green);
+  
+  padding: 20px;
+  font-size: 1.2rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.lab-list li a:hover {
+  background-color: var(--main-green);
+  color: #000;
+  box-shadow: 0 0 15px var(--main-green);
+}
+
+.lab-list li a.border-status-ocupado {
+  border-color: var(--alert-pink);
+  color: var(--alert-pink);
+}
+.lab-list li a.border-status-ocupado:hover {
+  background-color: var(--alert-pink);
+  color: #000;
+  box-shadow: 0 0 15px var(--alert-pink);
+}
+
+.lab-list li a.border-status-manutencao {
+  border-color: var(--alert-orange);
+  color: var(--alert-orange);
+}
+.lab-list li a.border-status-manutencao:hover {
+  background-color: var(--alert-orange);
+  color: #000;
+  box-shadow: 0 0 15px var(--alert-orange);
+}
+
+.lab-list li a.border-status-inativo {
+  border-color: var(--ui-gray);
+  color: #888; 
+}
+.lab-list li a.border-status-inativo:hover {
+  background-color: var(--ui-gray);
+  color: #fff;
+  box-shadow: 0 0 15px var(--ui-gray);
+}
+
+.lab-icon {
+  font-size: 1.5rem;
+}
+
+.lab-name {
+  font-weight: bold;
+}
+
+.lab-status {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #000;
+  background-color: var(--info-blue);
+  font-style: normal; 
+  font-weight: bold; 
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 10px; 
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+}
+
+.lab-list li a:hover .lab-status {
+  background-color: #000; 
+  color: #fff;
+}
+
+.lab-status.status-ocupado {
+  background-color: var(--alert-pink);
+}
+.lab-status.status-manutencao {
+  background-color: var(--alert-orange);
+}
+.lab-status.status-inativo {
+  background-color: var(--ui-gray);
+  color: #fff;
+}
+.lab-status.status-livre {
+  background-color: var(--main-green);
+  color: #000;
+}
+
+.link-novo {
+  display: block;
+  text-align: center;
+  background-color: var(--main-green);
+  color: #000;
+  border: 2px solid var(--main-green);
+  padding: 15px 20px;
+  cursor: pointer;
+  margin-top: 40px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.link-novo:hover {
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 0 20px #fff;
+  border-color: #fff;
+}
