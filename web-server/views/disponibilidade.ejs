@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGLAB: Disponibilidade</title>
+    <title>SIGLAB: Disponibilidade <%= lab_id === 'geral' ? 'Geral' : 'Laboratório ' + lab_nome %></title>
     
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link href="/css/disponibilidade.css" rel="stylesheet">
@@ -14,7 +14,7 @@
     <%- include('partials/header') %>
 
     <main>
-        <h1 class="titulo-pagina">Agenda de Laboratórios</h1>
+        <h1 class="titulo-pagina">Disponibilidade: <%= lab_id === 'geral' ? 'Geral' : lab_nome %></h1>
 
         <div class="agenda-container">
             
@@ -51,9 +51,11 @@
                     <li class="empty-state">Clique em um dia no calendário para ver a disponibilidade.</li>
                 </ul>
 
-                <a href="#" id="btnNovaReserva" class="btn-reservar" style="display: none;">
-                    + NOVA RESERVA NESTE DIA
-                </a>
+                <% if(user && (user.tipo === 'admin' || user.tipo === 'professor')) { %>
+                    <a href="#" id="btnNovaReserva" class="btn-reservar" style="display: none;">
+                        + NOVA RESERVA NESTE DIA
+                    </a>
+                <% } %>
             </aside>
 
         </div>
@@ -62,21 +64,44 @@
     <%- include('partials/footer') %>
 
     <script>
-        // --- MOCK DE DADOS (Substitua pelo que vem do Back-end) ---
-        // Formato: "YYYY-MM-DD": [Array de reservas]
-        const reservasDB = {
-            "2025-11-05": [
-                { lab: "LAB-01", hora: "08:00 - 10:00", user: "Prof. Miguel", tipo: "Aula" },
-                { lab: "LAB-03", hora: "14:00 - 16:00", user: "Turma Eng. Software", tipo: "Prática" }
-            ],
-            "2025-11-12": [
-                { lab: "LAB-02", hora: "10:00 - 12:00", user: "Manutenção TI", tipo: "Bloqueio" }
-            ],
-            "2025-11-20": [
-                { lab: "LAB-01", hora: "08:00 - 12:00", user: "Hackathon", tipo: "Evento" },
-                { lab: "LAB-01", hora: "13:00 - 18:00", user: "Hackathon", tipo: "Evento" }
-            ]
-        };
+        const dadosBrutos = <%- JSON.stringify(reservas) %>;
+
+        const currentLabId = "<%= lab_id === 'geral' ? '' : lab_id %>";
+        
+        // Objeto que vai alimentar o calendário
+        const reservasDB = {};
+
+        // Processa os dados brutos para o formato "YYYY-MM-DD": [Array]
+        dadosBrutos.forEach(reserva => {
+            // Suporta tanto o campo "data" quanto "data_inicio"
+            const dataString = reserva.data_inicio;
+            
+            if (dataString) {
+                // Extrai apenas a data YYYY-MM-DD (Evita bugs de fuso horário do objeto Date)
+                // Ex: "2025-11-05T08:00" -> ["2025-11-05", "08:00"]
+                const dataKey = dataString.split('T')[0];
+
+                if (!reservasDB[dataKey]) {
+                    reservasDB[dataKey] = [];
+                }
+
+                // Formatar hora
+                let horarioFormatado = "Horário Indefinido";
+                if (reserva.data_inicio && reserva.data_fim) {
+                    // Pega o trecho da hora HH:MM direto da string
+                    const hInicio = reserva.data_inicio.split('T')[1]?.substring(0, 5) || "";
+                    const hFim = reserva.data_fim.split('T')[1]?.substring(0, 5) || "";
+                    horarioFormatado = `${hInicio} - ${hFim}`;
+                }
+
+                reservasDB[dataKey].push({
+                    lab: `Lab ${reserva.id_lab}`,
+                    hora: horarioFormatado,
+                    user: reserva.name,
+                    tipo: reserva.motivo || "Reserva"
+                });
+            }
+        });
 
         let dataAtual = new Date();
         let diaSelecionado = null;
@@ -151,7 +176,7 @@
             document.getElementById('displayDataSelecionada').innerText = dataFormatada;
             
             const lista = document.getElementById('listaReservas');
-            lista.innerHTML = ''; // Limpa lista
+            lista.innerHTML = '';
 
             const reservas = reservasDB[dataKey];
 
@@ -172,8 +197,14 @@
 
             // Atualiza botão de nova reserva
             const btn = document.getElementById('btnNovaReserva');
+
             // Exemplo de link dinâmico
-            btn.href = `/laboratorios/reserva?data=${dataKey}`;
+            let urlDestino = `/cadastro/reserva?data=${dataKey}`;
+            if (currentLabId) {
+                urlDestino += `&lab=${currentLabId}`;
+            }
+
+            btn.href = urlDestino;
             btn.style.display = 'block';
             btn.innerText = `+ RESERVAR PARA ${dia}/${mes+1}`;
         }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGLAB - Login </title>
+
+
+    <link href="/css/login.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --main-green: #00FF00;
+            --dim-green: #003300;
+            --ui-gray: #111111;
+            --bg-color: #050505;
+            --alert-pink: #FF00FF;
+        }
+    </style>
+
+</head>
+
+<%- include('partials/header_login') %>
+
+<body>
+
+    <div class="main-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h2 class="glitch-title">SIGLAB</h2>
+            </div>
+            
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label for="email">E-MAIL</label>
+                    <input type="email" id="email" name="email" placeholder="user@alu.ufc.br" required autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">SENHA</label>
+                    <input type="password" id="password" name="password" placeholder="******" required>
+                    <span class="toggle-password" onclick="togglePass()">[VER]</span>
+                </div>
+
+                <button type="submit" class="btn-pixel">
+                    >> INICIAR SESSÃO <<
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function togglePass() {
+            const passInput = document.getElementById('password');
+            const btn = document.querySelector('.toggle-password');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                btn.innerText = "[OCULTAR]";
+            } else {
+                passInput.type = "password";
+                btn.innerText = "[VER]";
+            }
+        }
+    </script>
+
+</body>
+
+<%- include('partials/footer') %>
+
+</html>

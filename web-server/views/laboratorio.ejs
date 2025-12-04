@@ -14,7 +14,7 @@
     <%- include('partials/header') %> 
 
     <main>
-        <h1 class="titulo-pagina">Laboratório <%= lab.id %></h1>
+        <h1 class="titulo-pagina"><%= lab.nome %></h1>
 
         <p class="subtitulo-localizacao">
             <%= lab.localizacao %>
@@ -23,9 +23,9 @@
         <!-- painéis de informação (disponibilidade/avisos) -->
         <div class="info-panels-container">
             
-            <a href="/laboratorios/<%= lab.id %>/disponibilidade" class="info-card-link">
+            <a href="/disponibilidade/<%= lab.id %>" class="info-card-link">
                 <div class="info-card">
-                    <h2>Disponibilidade</h2>
+                    <h2>Disponibilidade do Laboratório</h2>
                 </div>
             </a>
             
@@ -34,6 +34,14 @@
                     <h2>Avisos</h2>
                 </div>
             </a>
+
+            <% if (user && user.tipo === 'admin') { %>
+                <a href="/historico/<%= lab.id %>" class="info-card-link">
+                    <div class="info-card">
+                        <h2>Histórico</h2>
+                    </div>
+                </a>
+            <% } %>
         </div>
 
         <!-- container da topologia -->

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGLAB</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="/css/footer.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #000000;
+            --main-green: #00ff41;
+            --dim-green: #008F11;
+            --alert-pink: #ff00ff;
+            --ui-gray: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px; /* efeito de grade no fundo */
+            color: var(--main-green);
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            border: 4px solid var(--ui-gray); /* borda na tela toda */
+        }
+
+        header {
+            border-bottom: 2px solid var(--main-green);
+            padding: 1rem 2rem;
+            text-align: center;
+            align-items: center;
+            background: var(--ui-gray);
+            box-shadow: 0 0 10px var(--main-green);
+        }
+
+        .logo-box {
+            padding: 5px 15px;
+            font-size: 1.9rem;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 0px var(black);
+        }
+
+        .logo-box a {
+            color: var(--main-green);
+            text-decoration: none; 
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-box">
+            <a href="/"><b>SIGLAB</b></a>
+        </div>
+    </header>
+    
+</body>

@@ -6,6 +6,8 @@
     <title>SIGLAB: Cadastro de Avisos</title>
     
     <link href="/css/cadastro.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -46,7 +48,7 @@
 
         <h2 class="titulo-pagina">Novo Aviso</h2>
         
-        <form id="form-aviso" class="form-cadastro">
+        <form id="form-aviso" class="form-cadastro" method="POST" action="/cadastro/avisos">
         
             <div class="form-group">
                 <label for="titulo">Título:</label>
@@ -106,7 +108,7 @@
 
 <%- include('partials/footer') %>
 
-<script>
+<!-- <script>
     document.getElementById('form-aviso').addEventListener('submit', async (event) => {
     
         event.preventDefault();
@@ -156,4 +158,4 @@
             feedbackEl.style.color = '#ff5555';
         }
     });
-</script>
+</script> -->

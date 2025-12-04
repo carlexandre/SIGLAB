@@ -1,0 +1,53 @@
+[
+  {
+    "id": "101",
+    "nome": "Lab 101",
+    "status": "disponivel",
+    "localizacao": "Bloco 910 - Lab 101",
+    "descricao": "",
+    "dispositivos": [
+      {
+        "id_dispositivo": "10101",
+        "nome": "PC1",
+        "tipo": "computador",
+        "status": "livre"
+      },
+      {
+        "id_dispositivo": "10102",
+        "nome": "PC2",
+        "tipo": "computador",
+        "status": "inoperante"
+      },
+      {
+        "id_dispositivo": "10103",
+        "nome": "Projetor",
+        "tipo": "projetor",
+        "status": "livre"
+      }
+    ]
+  },
+  {
+    "id": "102",
+    "nome": "Lab 102",
+    "status": "inativo",
+    "localizacao": "Bloco 910 - Lab 102",
+    "descricao": "",
+    "dispositivos": [
+      {
+        "id_dispositivo": "10201",
+        "nome": "PC1",
+        "tipo": "computador",
+        "status": "em_uso"
+      }
+    ]
+  },
+  {
+    "id": "103",
+    "nome": "LEC 1",
+    "status": "disponivel",
+    "localizacao": "Bloco 910, LEC1",
+    "capacidade": 40,
+    "descricao": "",
+    "dispositivos": []
+  }
+]

@@ -21,6 +21,15 @@
             <button class="tab-link" data-target="resolvidos">Histórico (Fechados)</button>
         </div>
         
+        <!-- Pequena função helper para formatar datas no EJS -->
+        <% 
+            function formatarData(isoStr) {
+                if (!isoStr) return 'Data desconhecida';
+                const d = new Date(isoStr);
+                return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            }
+        %>
+
         <!-- ativos -->
         <div class="tab-content active" id="ativos">
             
@@ -46,7 +55,10 @@
                         <div class="card-meta">
                             LAB: <%= chamado.id_lab %> <br> 
                             ID: <%= chamado.id_dispositivo %> <br>
-                            <span style="color: #888;">Cat: <%= chamado.tipo_problema %></span>
+                            <span style="color: #888;">Cat: <%= chamado.tipo_problema %></span><br>
+                            <span style="font-size: 0.8rem; color: #aaa;">
+                                Aberto em: <%= formatarData(chamado.data_abertura) %>
+                            </span>
                         </div>
                     </div>
                 <% 
@@ -84,7 +96,10 @@
                             </div>
                         </div>
                         <div class="card-meta" style="color: #555; border-top-color: #333;">
-                            <%= chamado.id_lab %> - <%= chamado.id_dispositivo %>
+                            <%= chamado.id_lab %> - <%= chamado.id_dispositivo %> <br>
+                            <span style="font-size: 0.8rem;">
+                                Fechado em: <%= formatarData(chamado.data_fechamento) %>
+                            </span>
                         </div>
                     </div>
                 <% 
@@ -130,7 +145,8 @@
                     <button type="submit" name="acao" value="salvar" class="btn-action" style="background-color: #222; color: #fff; border: 1px solid #555;">
                         Salvar Nota
                     </button>
-                    <button type="submit" name="acao" value="resolver" class="btn-action">
+                    <!-- ID adicionado ao botão para manipular via JS -->
+                    <button id="btnAcaoPrincipal" type="submit" name="acao" value="resolver" class="btn-action">
                         Marcar Resolvido
                     </button>
                 </div>
@@ -172,9 +188,20 @@
             document.getElementById('inputIdChamado').value = chamado.id || '0'; 
             document.getElementById('inputAnotacoes').value = chamado.anotacoes || '';
 
-            const form = document.getElementById('formAnotacao');
-            // Atualiza action caso necessário, ou confia no input hidden
-            // form.action = `/chamados/${chamado.id}/anotar`; 
+            // Lógica para alterar o botão de ação (Resolver vs Reabrir)
+            const btnPrincipal = document.getElementById('btnAcaoPrincipal');
+            
+            if (chamado.status === 'resolvido') {
+                btnPrincipal.innerText = "Reativar Chamado";
+                btnPrincipal.value = "reabrir"; // Valor enviado para o server
+                btnPrincipal.style.borderColor = "var(--alert-pink)"; // Ex: borda rosa para reabrir
+                btnPrincipal.style.color = "var(--alert-pink)";
+            } else {
+                btnPrincipal.innerText = "Marcar Resolvido";
+                btnPrincipal.value = "resolver"; // Valor enviado para o server
+                btnPrincipal.style.borderColor = "var(--dim-green)"; // Ex: borda verde para resolver
+                btnPrincipal.style.color = "var(--dim-green)";
+            }
 
             modal.style.display = 'flex';
         }

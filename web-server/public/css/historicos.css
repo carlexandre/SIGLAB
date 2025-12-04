@@ -17,10 +17,10 @@ body {
     background-image: 
         linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-size: 18px 18px;
     color: var(--main-green);
     font-family: 'VT323', monospace;
-    font-size: 20px;
+    font-size: 18px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -29,44 +29,45 @@ body {
 
 main {
     flex: 1;
-    padding: 20px 40px;
+    padding: 18px 36px;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1260px;
     margin: 0 auto;
 }
 
 .titulo-pagina {
     border-bottom: 1px dashed var(--main-green);
-    padding-bottom: 10px;
-    margin-bottom: 30px;
+    padding-bottom: 9px;
+    margin-bottom: 27px;
     text-transform: uppercase;
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     text-shadow: 0 0 5px var(--main-green);
 }
 
-/* navegação das abas */
 .tab-nav {
     display: flex;
-    gap: 10px;
+    gap: 9px;
     border-bottom: 2px solid var(--dim-green);
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 .tab-link {
     font-family: 'VT323', monospace;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     background: none;
     border: 1px solid var(--dim-green);
     border-bottom: none;
     color: var(--dim-green);
-    padding: 10px 20px;
+    padding: 9px 22px;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-transform: uppercase;
 }
 
 .tab-link:hover {
     color: var(--main-green);
     border-color: var(--main-green);
+    background: rgba(0, 255, 65, 0.05);
 }
 
 .tab-link.active {
@@ -74,12 +75,12 @@ main {
     color: var(--bg-color);
     border-color: var(--main-green);
     text-shadow: 0 0 5px var(--bg-color);
+    font-weight: bold;
 }
 
-/* conteúdo das abas */
 .tab-content {
     display: none;
-    padding: 10px;
+    padding: 9px;
     border: 1px solid var(--ui-gray);
     background: rgba(0, 255, 65, 0.03);
 }
@@ -88,25 +89,24 @@ main {
     display: block;
 }
 
-/* subtítulos dentro do conteúdo */
 .content-subtitle {
     background: var(--main-green);
     color: var(--bg-color);
-    padding: 2px 8px;
-    margin-top: 20px;
-    margin-bottom: 15px;
+    padding: 2px 7px;
+    margin-top: 18px;
+    margin-bottom: 13px;
     display: inline-block;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
 }
 
 .history-list {
     list-style: none;
     padding: 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .history-list li {
-    padding: 12px 10px;
+    padding: 11px 9px;
     border-bottom: 1px dashed var(--dim-green);
 }
 

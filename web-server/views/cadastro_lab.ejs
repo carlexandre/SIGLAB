@@ -6,6 +6,8 @@
     <title>SIGLAB: Cadastro de Laboratório</title>
     
     <link href="/css/cadastro.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -37,7 +39,7 @@
 
         <h2 class="titulo-pagina">Novo Laboratório</h2>
         
-        <form id="form-lab" class="form-cadastro">
+        <form action="/cadastro/laboratorios" method="POST" id="form-lab" class="form-cadastro">
         
             <div class="form-group">
                 <label for="nome">Nome do Laboratório:</label>
@@ -57,10 +59,10 @@
             <div class="form-group">
                 <label for="status">Status Atual:</label>
                 <select id="status" name="status" required>
-                    <option value="Disponível">Disponível</option>
-                    <option value="Manutenção">Em Manutenção</option>
-                    <option value="Reservado">Reservado</option>
-                    <option value="Inativo">Inativo</option>
+                    <option value="disponivel">Disponível</option>
+                    <option value="manutencao">Em Manutenção</option>
+                    <option value="reservado">Reservado</option>
+                    <option value="inativo">Inativo</option>
                 </select>
             </div>
 
@@ -82,7 +84,7 @@
 
 <%- include('partials/footer') %>
 
-<script>
+<!-- <script>
     document.getElementById('form-lab').addEventListener('submit', async (event) => {
     
         event.preventDefault();
@@ -126,5 +128,5 @@
             feedbackEl.style.color = '#ff5555';
         }
     });
-</script>
+</script> -->
 </html>

@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIGLAB</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <link href="/css/cadastro.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link href="/css/footer.css" rel="stylesheet">
     <link href="/css/header.css" rel="stylesheet">
 
@@ -48,16 +46,26 @@
 
     <header>
         <div class="logo-box">
-            SIGLAB<span class="blink">_</span>
+            <a href="/"><b>SIGLAB</b></a>
         </div>
 
         <nav>
             <ul>
                 <li><a href="/laboratorios"><span class="icon">🖥️</span> Laboratórios</a></li>
-                <li><a href="/historico"><span class="icon">💾</span> Histórico</a></li>
-                <li><a href="/reservas/todos"><span class="icon">📅</span> Reservas</a></li>
-                <li><a href="/chamados"><span class="icon">⚠️</span> Chamados</a></li>
-                <li><a href="/"><span class="icon">⚙️</span> Admin</a></li>
+                <li><a href="/disponibilidade/geral"><span class="icon">📅</span>Disponibilidade</a></li>
+                <% if(user && user.tipo === 'admin') { %>
+                    <li><a href="/historico/geral"><span class="icon">💾</span> Histórico</a></li>
+                    <li><a href="/chamados"><span class="icon">⚠️</span> Chamados</a></li>
+                    <li><a href="/"><span class="icon">⚙️</span> Admin</a></li>
+                <% } %>
+                <% if(user && user.tipo === 'professor') { %>
+                    <li><a href="/minhasreservas"><span class="icon">🕰️</span>Minhas Reservas</a></li>
+                <% } %>
+                <li>
+                    <a href="/logout" class="logout-btn" onclick="return confirm('Tem certeza que deseja encerrar a sessão?');">
+                        <span class="icon">🚪</span> Sair
+                    </a>
+                </li>
             </ul>
         </nav>
     </header>

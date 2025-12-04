@@ -25,7 +25,7 @@
                             <li>
                                 <strong>Lab:</strong> <%= res.id_lab %> | 
                                 <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
-                                <strong>Data:</strong> <%= new Date(res.data).toLocaleString('pt-BR') %>
+                                <strong>Data:</strong> <%= new Date(res.data_inicio).toLocaleString('pt-BR') %>
                             </li> 
                         <% }); %>
                     <% } else { %>
@@ -40,7 +40,7 @@
                             <li>
                                 <strong>Lab:</strong> <%= res.id_lab %> | 
                                 <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
-                                <strong>Data:</strong> <%= new Date(res.data).toLocaleString('pt-BR') %>
+                                <strong>Data:</strong> <%= new Date(res.data_fim).toLocaleString('pt-BR') %>
                             </li> 
                         <% }); %>
                     <% } else { %>

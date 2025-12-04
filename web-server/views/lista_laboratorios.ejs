@@ -34,7 +34,7 @@
   <%- include('partials/header') %>
 
   <main>
-    <h1>Laboratórios</h1>
+    <h1>LABORATÓRIOS</h1>
     <% laboratorios.forEach(lab => { %>
     <ul class="lab-list">         
       <li>
@@ -47,9 +47,18 @@
     </ul>
     <% }); %>
 
-    <a href="/cadastro/laboratorios" class="link-novo">
-        [+] Novo Laboratório
+    <%if(user && user.tipo === 'admin') { %>
+      <a href="/cadastro/laboratorios" class="link-novo">
+          [+] Novo Laboratório
+      </a>
+    <% } %>
+    <%if(user && (user.tipo === 'professor' || user.tipo === 'aluno')) { %>
+      <a href="/disponibilidade/geral" class="link-novo">
+        📅 Ver Disponibilidade
     </a>
+    <% } %>
+    
+
   </main>
 
   <%- include('partials/footer') %>
