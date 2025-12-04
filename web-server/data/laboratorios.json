@@ -10,7 +10,7 @@
         "id_dispositivo": "10101",
         "nome": "PC1",
         "tipo": "computador",
-        "status": "livre"
+        "status": "em_uso"
       },
       {
         "id_dispositivo": "10102",
@@ -21,6 +21,24 @@
       {
         "id_dispositivo": "10103",
         "nome": "Projetor",
+        "tipo": "projetor",
+        "status": "livre"
+      },
+      {
+        "id_dispositivo": "101-1764881680918",
+        "nome": "PC_04",
+        "tipo": "computador",
+        "status": "livre"
+      },
+      {
+        "id_dispositivo": "101-imp-1764881693814-1",
+        "nome": "PC5",
+        "tipo": "computador",
+        "status": "inoperante"
+      },
+      {
+        "id_dispositivo": "101-imp-1764881693814-2",
+        "nome": "Projetor7",
         "tipo": "projetor",
         "status": "livre"
       }

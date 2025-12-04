@@ -16,7 +16,6 @@ h1 {
   text-shadow: 0 0 3px var(--main-green);
 }
 
-
 .welcome-panel {
 border: 1px dashed var(--main-green);
 padding: 18px;
@@ -37,6 +36,10 @@ background: black;
 position: relative;
 }
 
+.card p{
+  font-size: 1.2rem;
+}
+
 .card-header {
 background: var(--main-green);
 color: black;
@@ -44,17 +47,4 @@ padding: 2px 4px;
 font-weight: bold;
 margin-bottom: 9px;
 text-transform: uppercase;
-}
-
-.form-group { margin-bottom: 18px; }
-label { display: block; margin-bottom: 7px; font-size: 0.7em; color: #aaffaa; }
-input, select, textarea {
-    width: 96%; 
-    padding: 13px;
-    background-color: #000;
-    border: 1px solid #00FF00;
-    color: #00FF00;
-    font-family: 'Press Start 2P', monospace; 
-    font-size: 0.7em;
-    outline: none;
 }

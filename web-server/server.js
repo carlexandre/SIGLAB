@@ -157,7 +157,7 @@ app.get('/historico/:id_lab', verifyLogin, checkTipo(['admin']), async (req, res
   try {
     const id = req.params.id_lab;
     const historico_reservasPath = path.join(__dirname, 'data', 'reservas.json');
-    const historico_userPath = path.join(__dirname, 'data', 'hist_users.json');
+    const historico_userPath = path.join(__dirname, 'data', 'acessos.json');
     const labPath = path.join(__dirname, 'data', 'laboratorios.json');
 
     const dataReservas = await fs.readFile(historico_reservasPath, 'utf8');
@@ -267,7 +267,7 @@ app.get('/laboratorios/:id_lab', verifyLogin, async (req, res) => {
         return res.status(404).send('Laboratório não encontrado.');
     }
 
-    res.render('laboratorio', { lab : lab });
+    res.render('laboratorio', { lab : lab, user: req.user });
   } catch (err) {
     res.status(500).send('Erro ao buscar dados da API.');
   }
@@ -329,6 +329,147 @@ app.post('/cadastro/laboratorios', verifyLogin, checkTipo(['admin']), async (req
                 window.history.back();
             </script>
         `);
+    }
+});
+
+app.post('/laboratorios/:id_lab/dispositivos', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const { id_lab } = req.params;
+    const { nome, tipo, status } = req.body;
+
+    if (!nome || !tipo || !status) {
+        return res.send(`
+            <script>
+                alert("Por favor, preencha todos os campos do dispositivo.");
+                window.history.back();
+            </script>
+        `);
+    }
+
+    const labsPath = path.join(__dirname, 'data', 'laboratorios.json');
+
+    try {
+        const data = await fs.readFile(labsPath, 'utf-8');
+        const laboratorios = JSON.parse(data);
+
+        const labIndex = laboratorios.findIndex(l => l.id === id_lab);
+
+        if (labIndex === -1) {
+            return res.status(404).send("Laboratório não encontrado");
+        }
+
+        const novoIdDispositivo = `${id_lab}-${Date.now()}`;
+
+        const novoDispositivo = {
+            id_dispositivo: novoIdDispositivo,
+            nome: nome,
+            tipo: tipo,
+            status: status
+        };
+
+        if (!laboratorios[labIndex].dispositivos) {
+            laboratorios[labIndex].dispositivos = [];
+        }
+
+        laboratorios[labIndex].dispositivos.push(novoDispositivo);
+
+        await fs.writeFile(labsPath, JSON.stringify(laboratorios, null, 2));
+
+        res.redirect(`/laboratorios/${id_lab}`);
+
+    } catch (err) {
+        console.error("Erro ao salvar dispositivo:", err);
+        res.status(500).send(`
+            <script>
+                alert("Erro interno ao salvar dispositivo.");
+                window.history.back();
+            </script>
+        `);
+    }
+});
+
+app.post('/laboratorios/:id_lab/dispositivos/:id_dispositivo/delete', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const { id_lab, id_dispositivo } = req.params;
+    const labsPath = path.join(__dirname, 'data', 'laboratorios.json');
+
+    try {
+        const data = await fs.readFile(labsPath, 'utf-8');
+        const laboratorios = JSON.parse(data);
+
+        const labIndex = laboratorios.findIndex(l => l.id === id_lab);
+
+        if (labIndex === -1) {
+            return res.status(404).send("Laboratório não encontrado");
+        }
+
+        const dispIndex = laboratorios[labIndex].dispositivos.findIndex(d => d.id_dispositivo === id_dispositivo);
+
+        if (dispIndex === -1) {
+            return res.status(404).send("Dispositivo não encontrado");
+        }
+
+        // Remove o dispositivo do array
+        laboratorios[labIndex].dispositivos.splice(dispIndex, 1);
+
+        await fs.writeFile(labsPath, JSON.stringify(laboratorios, null, 2));
+
+        res.redirect(`/laboratorios/${id_lab}`);
+
+    } catch (err) {
+        console.error("Erro ao excluir dispositivo:", err);
+        res.status(500).send(`
+            <script>
+                alert("Erro interno ao excluir dispositivo.");
+                window.history.back();
+            </script>
+        `);
+    }
+});
+
+// IMPORTAR CSV (Rota em lote)
+app.post('/laboratorios/:id_lab/importar', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const { id_lab } = req.params;
+    const { dispositivos } = req.body; // Espera um array de objetos
+
+    if (!dispositivos || !Array.isArray(dispositivos)) {
+        return res.status(400).json({ success: false, message: "Dados inválidos." });
+    }
+
+    const labsPath = path.join(__dirname, 'data', 'laboratorios.json');
+
+    try {
+        const data = await fs.readFile(labsPath, 'utf-8');
+        const laboratorios = JSON.parse(data);
+
+        const labIndex = laboratorios.findIndex(l => l.id === id_lab);
+
+        if (labIndex === -1) {
+            return res.status(404).json({ success: false, message: "Laboratório não encontrado." });
+        }
+
+        if (!laboratorios[labIndex].dispositivos) {
+            laboratorios[labIndex].dispositivos = [];
+        }
+
+        let count = 0;
+        dispositivos.forEach(d => {
+            // Gera um ID único simples para cada item do CSV
+            const novoId = `${id_lab}-imp-${Date.now()}-${count++}`;
+            
+            laboratorios[labIndex].dispositivos.push({
+                id_dispositivo: novoId,
+                nome: d.nome,
+                tipo: d.tipo ? d.tipo.toLowerCase() : 'outros',
+                status: d.status ? d.status.toLowerCase() : 'livre'
+            });
+        });
+
+        await fs.writeFile(labsPath, JSON.stringify(laboratorios, null, 2));
+
+        res.json({ success: true, message: `${count} dispositivos importados com sucesso!` });
+
+    } catch (err) {
+        console.error("Erro na importação:", err);
+        res.status(500).json({ success: false, message: "Erro interno no servidor." });
     }
 });
 

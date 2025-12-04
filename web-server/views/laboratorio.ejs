@@ -7,6 +7,9 @@
     <title>SIGLAB - Laboratório <%= lab.id %></title>
     
     <link href="/css/laboratorios.css" rel="stylesheet">
+    
+    <!-- Importando fontes retro para o modal -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -44,45 +47,221 @@
             <% } %>
         </div>
 
+        <!-- MODAL DE CADASTRO DE DISPOSITIVO -->
+        <% if (user && user.tipo === 'admin') { %>
+            <div id="modalDispositivo" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" onclick="closeModal()">&times;</span>
+                    <h3>> Gerenciar_Dispositivos_</h3>
+                    
+                    <!-- Cadastro Manual -->
+                    <form action="/laboratorios/<%= lab.id %>/dispositivos" method="POST" class="modal-form">
+                        <label style="color: #fff; border-bottom: 1px solid #005500; padding-bottom: 5px;">[ MODO MANUAL ]</label>
+                        
+                        <label for="nome">Nome do Dispositivo:</label>
+                        <input type="text" id="nome" name="nome" placeholder="Ex: PC_01" required>
+                        
+                        <label for="tipo">Tipo:</label>
+                        <select id="tipo" name="tipo" required>
+                            <option value="" disabled selected>SELECIONE...</option>
+                            <option value="computador">COMPUTADOR</option>
+                            <option value="projetor">PROJETOR</option>
+                            <option value="impressora">IMPRESSORA</option>
+                        </select>
+                        
+                        <label for="status">Status Inicial:</label>
+                        <select id="status" name="status" required>
+                            <option value="livre">LIVRE</option>
+                            <option value="em_uso">EM USO</option>
+                            <option value="inoperante">INOPERANTE</option>
+                        </select>
+
+                        <button type="submit">CONFIRMAR INSERÇÃO</button>
+                    </form>
+
+                    <!-- Divisória Visual -->
+                    <div class="modal-divider">
+                        <span>OU IMPORTAR EM MASSA</span>
+                    </div>
+
+                    <!-- Importação CSV -->
+                    <div class="import-section">
+                        <!-- Input Escondido para Upload -->
+                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleFileSelect(event)">
+                        
+                        <button onclick="document.getElementById('csvFileInput').click()" class="btn-action btn-import-modal">
+                            📥 Carregar Arquivo CSV
+                        </button>
+                        <p style="font-size: 0.9rem; color: #005500; margin-top: 5px;">*Formato: Nome,Tipo,Status</p>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
         <!-- container da topologia -->
         <div class="topology-container">
-            <h2>Topologia do Laboratório</h2>
+            <!-- HEADER DA TOPOLOGIA COM BOTÃO DE ADMIN -->
+            <div class="topology-header">
+                <h2>Topologia do Laboratório</h2>
+                
+                <% if (user && user.tipo === 'admin') { %>
+                    <button onclick="openModal()" class="btn-action">
+                        <h3>+ Novo Dispositivo</h3>
+                    </button>
+                <% } %>
+            </div>
             
             <div class="topology-map">
                 <!-- 
                   looping EJS para listar os dispositivos 
-                  (por enquanto, eles vão aparecer em sequência. 
-                  o posicionamento (x, y) viria do DB no futuro para o drag-and-drop)
                 -->
-                <% lab.dispositivos.forEach(disp => { %>
-                    
-                    <div class="device">
+                <% if (lab.dispositivos && lab.dispositivos.length > 0) { %>
+                    <% lab.dispositivos.forEach(disp => { %>
                         
-                        <span class="device-icon">
-                            <% if (disp.tipo === 'projetor') { %>
-                                📽️ <!-- projetor -->
-                            <% } else if (disp.tipo === 'impressora') { %>
-                                🖨️ <!-- impressora -->
-                            <% } else { %>
-                                🖥️ <!-- computador -->
-                            <% } %>
-                        </span>
-                        
-                        <div class="tooltip">
-                            <div class="tooltip-content">
-                                <p><strong>Dispositivo:</strong> <%= disp.nome %></p>
-                                <p><strong>Status:</strong> <%= disp.status %></p>
-                                <a href="/laboratorios/<%= lab.id %>/report/<%= disp.id_dispositivo %>">Reportar Problema</a>
+                        <!-- 
+                           Dispositivo Compacto (preparado para drag and drop)
+                           Classe do status no container pai para cor da borda
+                        -->
+                        <div class="device <%= disp.status %>">
+                            
+                            <!-- Texto visual do status AGORA NO TOPO -->
+                            <span class="status-label">
+                                <%= disp.status.replace('_', ' ') %>
+                            </span>
+
+                            <span class="device-icon">
+                                <% if (disp.tipo === 'projetor') { %>
+                                    📽️
+                                <% } else if (disp.tipo === 'impressora') { %>
+                                    🖨️
+                                <% } else { %>
+                                    🖥️
+                                <% } %>
+                            </span>
+
+                            <!-- Tooltip (Menu de ações e detalhes) -->
+                            <div class="tooltip">
+                                <div class="tooltip-content">
+                                    <p><strong>ID:</strong> <%= disp.nome %></p>
+                                    <p><strong>Tipo:</strong> <%= disp.tipo %></p>
+                                    <hr style="border-color: inherit; margin: 5px 0; opacity: 0.5;">
+                                    
+                                    <a href="/laboratorios/<%= lab.id %>/report/<%= disp.id_dispositivo %>" class="tooltip-btn btn-report">Reportar Problema</a>
+                                    
+                                    <% if (user && user.tipo === 'admin') { %>
+                                        <form action="/laboratorios/<%= lab.id %>/dispositivos/<%= disp.id_dispositivo %>/delete" method="POST" onsubmit="return confirm('ATENÇÃO ADMIN:\n\nTem certeza que deseja EXCLUIR permanentemente o dispositivo \'<%= disp.nome %>\'?');">
+                                            <button type="submit" class="tooltip-btn btn-delete-device">Excluir</button>
+                                        </form>
+                                    <% } %>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                
-                <% }); %>
+                    
+                    <% }); %>
+                <% } else { %>
+                    <p style="width: 100%; text-align: center; color: #666; font-size: 1.2rem; margin-top: 50px;">
+                        [ SISTEMA: Nenhum dispositivo detectado neste setor. ]
+                    </p>
+                <% } %>
             </div>
         </div>
     </main>
 
     <%- include('partials/footer') %> 
+
+    <!-- SCRIPTS PARA MODAL E IMPORTAÇÃO CSV -->
+    <script>
+        // --- LÓGICA DO MODAL ---
+        const modal = document.getElementById("modalDispositivo");
+        
+        function openModal() {
+            if(modal) modal.style.display = "block";
+        }
+
+        function closeModal() {
+            if(modal) modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // --- LÓGICA DE IMPORTAÇÃO CSV ---
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const text = e.target.result;
+                processCSV(text);
+            };
+
+            reader.readAsText(file);
+        }
+
+        function processCSV(csvText) {
+            const lines = csvText.trim().split(/\r\n|\n/);
+            
+            if (lines.length < 2) {
+                alert("Erro: Arquivo CSV vazio ou inválido.");
+                return;
+            }
+
+            const dispositivos = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const row = lines[i].split(',');
+                
+                if (row.length >= 3) {
+                    const nome = row[0].trim();
+                    const tipo = row[1].trim();
+                    const status = row[2].trim();
+
+                    if (nome && tipo) {
+                        dispositivos.push({ nome, tipo, status });
+                    }
+                }
+            }
+
+            if (dispositivos.length === 0) {
+                alert("Nenhum dispositivo válido encontrado no CSV.");
+                return;
+            }
+
+            sendDataToServer(dispositivos);
+        }
+
+        async function sendDataToServer(data) {
+            const idLab = "<%= lab.id %>";
+            
+            try {
+                const response = await fetch(`/laboratorios/${idLab}/importar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ dispositivos: data })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.message);
+                    window.location.reload(); 
+                } else {
+                    alert("Erro ao importar: " + result.message);
+                }
+
+            } catch (error) {
+                console.error("Erro:", error);
+                alert("Erro de conexão ao tentar importar.");
+            }
+        }
+    </script>
 
 </body>
 </html>
