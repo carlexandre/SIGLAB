@@ -10,37 +10,51 @@
         "id_dispositivo": "10101",
         "nome": "PC1",
         "tipo": "computador",
-        "status": "em_uso"
+        "status": "em_uso",
+        "posicao": {
+          "row": 1,
+          "col": 3
+        }
       },
       {
         "id_dispositivo": "10102",
         "nome": "PC2",
         "tipo": "computador",
-        "status": "inoperante"
+        "status": "inoperante",
+        "posicao": {
+          "row": 1,
+          "col": 4
+        }
       },
       {
         "id_dispositivo": "10103",
         "nome": "Projetor",
         "tipo": "projetor",
-        "status": "livre"
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 1
+        }
       },
       {
         "id_dispositivo": "101-1764881680918",
         "nome": "PC_04",
         "tipo": "computador",
-        "status": "livre"
+        "status": "livre",
+        "posicao": {
+          "row": 4,
+          "col": 3
+        }
       },
       {
         "id_dispositivo": "101-imp-1764881693814-1",
         "nome": "PC5",
         "tipo": "computador",
-        "status": "inoperante"
-      },
-      {
-        "id_dispositivo": "101-imp-1764881693814-2",
-        "nome": "Projetor7",
-        "tipo": "projetor",
-        "status": "livre"
+        "status": "inoperante",
+        "posicao": {
+          "row": 4,
+          "col": 4
+        }
       }
     ]
   },

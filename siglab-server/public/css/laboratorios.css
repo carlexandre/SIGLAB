@@ -122,39 +122,65 @@ main {
     text-transform: uppercase;
 }
 
+.header-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* GRID SYSTEM PARA O MAPA */
 .topology-map {
     border: 2px dashed var(--dim-green);
     background-color: rgba(0, 0, 0, 0.5);
-    min-height: 450px;
-    padding: 25px;
-    position: relative; 
+    min-height: 300px;
+    padding: 20px;
+    position: relative;
     
-    /* Layout livre (para futuro drag and drop) ou flex wrap por enquanto */
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px; /* Aumentei o espaço pois agora não tem borda de container */
-    align-content: flex-start;
+    /* Configuração de Grid Real */
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 80px; /* Altura fixa para as linhas */
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+/* Modo de edição */
+.topology-map.editing {
+    border-color: #00FF00;
+    border-style: solid;
+    background-image: 
+        linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+    background-size: calc(100% / 12) 80px; /* Tamanho exato das células do grid */
+    box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.1);
 }
 
 .device {
     position: relative;
-    width: fit-content;
-    height: fit-content;
-    background-color: transparent;
-    border: none;
-    padding: 5px;
-    
-    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
-    cursor: grab; 
+    cursor: default; 
     transition: all 0.2s ease;
+    z-index: 10;
 }
 
-.device:active {
+.device:hover { z-index: 1000 !important; }
+
+/* Quando em modo de edição, dispositivos ficam arrastáveis */
+.topology-map.editing .device {
+    cursor: grab;
+    border: 1px dashed rgba(0, 255, 0, 0.3);
+    background: rgba(0, 20, 0, 0.5);
+}
+
+.topology-map.editing .device:active {
     cursor: grabbing;
+    background: rgba(0, 50, 0, 0.8);
+    transform: scale(1.05);
+    z-index: 100;
 }
 
 .device-icon {
@@ -172,42 +198,27 @@ main {
     font-weight: bold;
     letter-spacing: 1px;
     line-height: 1;
-    
-    /* Limpando estilos de "caixa" */
     padding: 2px 0;
-    background-color: transparent; 
-    border: none; 
-    
-    /* Sombra preta dura para garantir leitura sobre o mapa */
     text-shadow: 2px 2px 0 #000;
-    
     pointer-events: none;
     white-space: nowrap;
     transition: all 0.2s ease;
 }
 
 /* --- VARIAÇÕES DE STATUS --- */
-
-/* 1. LIVRE (VERDE) */
-.device.livre .status-label {
-    color: var(--dim-green);
-}
+.device.livre .status-label { color: var(--dim-green); }
 .device.livre:hover .status-label {
     color: var(--main-green);
     text-shadow: 0 0 8px var(--main-green), 2px 2px 0 #000;
 }
 .device.livre:hover .device-icon {
     filter: none;
-    transform: scale(1.15); /* Ícone cresce ao passar o mouse */
-    text-shadow: 0 0 15px var(--main-green); /* Brilho no ícone */
+    transform: scale(1.15);
+    text-shadow: 0 0 15px var(--main-green);
 }
 
-/* 2. EM USO (AMARELO) */
-.device.em_uso .status-label {
-    color: var(--warning-yellow);
-}
+.device.em_uso .status-label { color: var(--warning-yellow); }
 .device.em_uso .device-icon { filter: sepia(100%) hue-rotate(5deg); }
-
 .device.em_uso:hover .status-label {
     color: #ffffaa;
     text-shadow: 0 0 8px var(--warning-yellow), 2px 2px 0 #000;
@@ -218,59 +229,49 @@ main {
     text-shadow: 0 0 15px var(--warning-yellow);
 }
 
-/* 3. INOPERANTE (CINZA / DESLIGADO) */
-.device.inoperante .status-label {
-    color: var(--off-gray);
-}
+.device.inoperante .status-label { color: var(--off-gray); }
 .device.inoperante .device-icon { 
     opacity: 0.4;
     filter: grayscale(100%) brightness(0.6);
 }
-
-.device.inoperante:hover .status-label {
-    color: #999;
-}
+.device.inoperante:hover .status-label { color: #999; }
 .device.inoperante:hover .device-icon {
-    opacity: 0.8;
+    opacity: 1 !important;
     transform: scale(1.1);
 }
 
 /* --- TOOLTIP --- */
+/* Desativar tooltip durante o modo de edição para não atrapalhar */
+.topology-map.editing .device:hover .tooltip {
+    display: none;
+}
+
 .device .tooltip {
     visibility: hidden;
     opacity: 0;
-    
     position: absolute;
-    bottom: 100%; /* Fica acima do conjunto todo */
+    bottom: 100%; 
     left: 50%;
     transform: translateX(-50%);
     margin-bottom: 5px;
-    
     background: #000;
     border: 1px solid currentColor;
     box-shadow: 0 4px 15px rgba(0,0,0,0.9);
     padding: 10px;
-    
     font-size: 0.85rem;
     color: #fff;
     white-space: nowrap;
-    
     transition: opacity 0.2s, visibility 0.2s;
     z-index: 20;
     min-width: 140px;
     pointer-events: auto; 
 }
 
-/* Herda a cor da borda do pai */
 .device.livre .tooltip { border-color: var(--main-green); color: var(--main-green); }
 .device.em_uso .tooltip { border-color: var(--warning-yellow); color: var(--warning-yellow); }
-/* Tooltip do inoperante mantive cinza claro para leitura */
 .device.inoperante .tooltip { border-color: var(--off-gray); color: #aaa; }
 
-.device:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-}
+.device:hover .tooltip { visibility: visible; opacity: 1; z-index: 1001 !important; }
 
 .tooltip-content p { margin: 3px 0; text-align: left; }
 
@@ -300,7 +301,6 @@ main {
 }
 .btn-delete-device:hover { background: #ff3333; color: #fff; }
 
-
 /* --- OUTROS ELEMENTOS --- */
 .subtitulo-localizacao {
     text-align: center;
@@ -321,16 +321,35 @@ main {
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     transition: 0.2s;
     box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
-    height: fit-content;
+    height: 45px; /* Altura fixa para alinhar os botões */
+    min-width: 180px;
 }
-.btn-action h3 { font-size: 1.35rem; }
+
+.btn-action h3 { font-size: 1.2rem; margin: 0; }
 .btn-action:hover {
     background-color: #fff;
     border-color: #fff;
     box-shadow: 0 0 15px #fff;
+}
+
+/* Botão de Editar Topologia */
+.btn-edit-topology {
+    background-color: transparent;
+    color: #00FF00;
+    border: 2px solid #00FF00;
+}
+.btn-edit-topology:hover {
+    background-color: #00FF00;
+    color: #000;
+}
+.btn-edit-topology.saving {
+    background-color: var(--alert-pink);
+    border-color: var(--alert-pink);
+    color: #000;
 }
 
 .btn-import-modal {
@@ -340,6 +359,7 @@ main {
     margin-top: 10px;
     border: 2px dashed #00FF00;
 }
+
 .btn-import-modal:hover {
     background-color: #00FF00;
     color: #000;

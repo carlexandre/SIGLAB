@@ -425,6 +425,49 @@ app.post('/laboratorios/:id_lab/dispositivos/:id_dispositivo/delete', verifyLogi
     }
 });
 
+app.post('/laboratorios/:id_lab/salvar_topologia', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const { id_lab } = req.params;
+    const { posicoes } = req.body; // Array de { id_dispositivo, row, col }
+
+    if (!posicoes || !Array.isArray(posicoes)) {
+        return res.status(400).json({ success: false, message: "Dados de topologia inválidos." });
+    }
+
+    const labsPath = path.join(__dirname, 'data', 'laboratorios.json');
+
+    try {
+        const data = await fs.readFile(labsPath, 'utf-8');
+        const laboratorios = JSON.parse(data);
+
+        const labIndex = laboratorios.findIndex(l => l.id === id_lab);
+
+        if (labIndex === -1) {
+            return res.status(404).json({ success: false, message: "Laboratório não encontrado." });
+        }
+
+        const lab = laboratorios[labIndex];
+
+        // Atualizar posições
+        posicoes.forEach(pos => {
+            const disp = lab.dispositivos.find(d => d.id_dispositivo === pos.id_dispositivo);
+            if (disp) {
+                disp.posicao = {
+                    row: parseInt(pos.row),
+                    col: parseInt(pos.col)
+                };
+            }
+        });
+
+        await fs.writeFile(labsPath, JSON.stringify(laboratorios, null, 2));
+
+        res.json({ success: true, message: "Topologia salva com sucesso!" });
+
+    } catch (err) {
+        console.error("Erro ao salvar topologia:", err);
+        res.status(500).json({ success: false, message: "Erro interno no servidor." });
+    }
+});
+
 // IMPORTAR CSV (Rota em lote)
 app.post('/laboratorios/:id_lab/importar', verifyLogin, checkTipo(['admin']), async (req, res) => {
     const { id_lab } = req.params;

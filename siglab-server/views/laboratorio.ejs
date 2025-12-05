@@ -99,18 +99,25 @@
 
         <!-- container da topologia -->
         <div class="topology-container">
-            <!-- HEADER DA TOPOLOGIA COM BOTÃO DE ADMIN -->
+            <!-- HEADER DA TOPOLOGIA COM BOTÕES DE AÇÃO -->
             <div class="topology-header">
                 <h2>Topologia do Laboratório</h2>
                 
                 <% if (user && user.tipo === 'admin') { %>
-                    <button onclick="openModal()" class="btn-action">
-                        <h3>+ Novo Dispositivo</h3>
-                    </button>
+                    <div class="header-buttons">
+                        <!-- Botão de Editar Topologia -->
+                        <button id="btnToggleEdit" onclick="toggleEditMode()" class="btn-action btn-edit-topology">
+                            <h3 id="btnEditText">📐 Editar Topologia</h3>
+                        </button>
+
+                        <button onclick="openModal()" class="btn-action">
+                            <h3>+ Novo Dispositivo</h3>
+                        </button>
+                    </div>
                 <% } %>
             </div>
             
-            <div class="topology-map">
+            <div class="topology-map" id="topologyMap">
                 <!-- 
                   looping EJS para listar os dispositivos 
                 -->
@@ -118,10 +125,12 @@
                     <% lab.dispositivos.forEach(disp => { %>
                         
                         <!-- 
-                           Dispositivo Compacto (preparado para drag and drop)
-                           Classe do status no container pai para cor da borda
+                           Dispositivo com coordenadas de grid e atributos de Drag & Drop
                         -->
-                        <div class="device <%= disp.status %>">
+                        <div class="device <%= disp.status %>" 
+                             id="<%= disp.id_dispositivo %>"
+                             style="grid-area: <%= disp.posicao ? disp.posicao.row : '1' %> / <%= disp.posicao ? disp.posicao.col : '1' %>;"
+                             data-nome="<%= disp.nome %>">
                             
                             <span class="status-label">
                                 <%= disp.status.replace('_', ' ') %>
@@ -157,7 +166,8 @@
                     
                     <% }); %>
                 <% } else { %>
-                    <p style="width: 100%; text-align: center; color: #666; font-size: 1.2rem; margin-top: 50px;">
+                    <!-- Se não houver dispositivos, exibe mensagem ocupando toda a grade -->
+                    <p style="grid-column: 1 / -1; text-align: center; color: #666; font-size: 1.2rem; margin-top: 50px;">
                         [ SISTEMA: Nenhum dispositivo detectado neste setor. ]
                     </p>
                 <% } %>
@@ -167,9 +177,208 @@
 
     <%- include('partials/footer') %> 
 
-    <!-- SCRIPTS PARA MODAL E IMPORTAÇÃO CSV -->
+    <!-- SCRIPTS GERAIS -->
     <script>
-        // --- LÓGICA DO MODAL ---
+        // --- VARIÁVEIS DE CONTROLE DE EDIÇÃO ---
+        let isEditMode = false;
+        let draggedElement = null;
+        
+        // Armazena a posição de origem para o SWAP
+        let sourceRow = null;
+        let sourceCol = null;
+
+        const topologyMap = document.getElementById('topologyMap');
+
+        // --- LÓGICA DE DRAG AND DROP (TOPOLOGIA) ---
+        
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('btnToggleEdit');
+            const btnText = document.getElementById('btnEditText');
+            const devices = document.querySelectorAll('.device');
+
+            if (isEditMode) {
+                // ATIVAR MODO EDIÇÃO
+                topologyMap.classList.add('editing');
+                btn.classList.add('saving');
+                btnText.innerText = '💾 SALVAR MATRIZ';
+                
+                // Habilitar arraste nos dispositivos
+                devices.forEach(dev => {
+                    dev.setAttribute('draggable', 'true');
+                    addDragEvents(dev);
+                });
+
+                // Habilitar drop no mapa
+                addMapDropEvents();
+
+            } else {
+                // SALVAR E SAIR
+                saveTopology();
+            }
+        }
+
+        async function saveTopology() {
+            const devices = document.querySelectorAll('.device');
+            const positions = [];
+
+            devices.forEach(dev => {
+                // Pega o estilo computado final (após o drop)
+                const style = window.getComputedStyle(dev);
+                const row = style.gridRowStart;
+                const col = style.gridColumnStart;
+                
+                // Salvar apenas se tiver posição válida numérica
+                if (row && col && !isNaN(parseInt(row)) && !isNaN(parseInt(col))) {
+                    positions.push({
+                        id_dispositivo: dev.id,
+                        row: parseInt(row),
+                        col: parseInt(col)
+                    });
+                }
+            });
+
+            // Feedback visual de salvamento
+            const btnText = document.getElementById('btnEditText');
+            btnText.innerText = '⏳ SALVANDO...';
+
+            try {
+                const idLab = "<%= lab.id %>";
+                const response = await fetch(`/laboratorios/${idLab}/salvar_topologia`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ posicoes: positions })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // DESATIVAR MODO EDIÇÃO
+                    const btn = document.getElementById('btnToggleEdit');
+                    topologyMap.classList.remove('editing');
+                    btn.classList.remove('saving');
+                    btnText.innerText = '📐 Editar Topologia';
+
+                    // Remover eventos de drag
+                    devices.forEach(dev => {
+                        dev.setAttribute('draggable', 'false');
+                        removeDragEvents(dev);
+                    });
+                    
+                } else {
+                    alert("Erro ao salvar: " + result.message);
+                    btnText.innerText = '💾 TENTAR NOVAMENTE';
+                    isEditMode = true; // Mantém no modo edição
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Erro de conexão ao salvar.");
+                btnText.innerText = '💾 TENTAR NOVAMENTE';
+            }
+        }
+
+        // --- EVENTOS DE DRAG NATIVE HTML5 ---
+
+        function addDragEvents(element) {
+            element.addEventListener('dragstart', handleDragStart);
+            element.addEventListener('dragend', handleDragEnd);
+        }
+
+        function removeDragEvents(element) {
+            element.removeEventListener('dragstart', handleDragStart);
+            element.removeEventListener('dragend', handleDragEnd);
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            
+            // Captura a posição original (row/col) antes de arrastar
+            // Usamos getComputedStyle para garantir que pegamos o valor real do grid
+            const style = window.getComputedStyle(this);
+            sourceRow = parseInt(style.gridRowStart);
+            sourceCol = parseInt(style.gridColumnStart);
+
+            e.dataTransfer.effectAllowed = 'move';
+            this.style.opacity = '0.4';
+            this.style.zIndex = '1000'; // Trazer para frente
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+            this.style.zIndex = '';
+            draggedElement = null;
+            sourceRow = null;
+            sourceCol = null;
+        }
+
+        function addMapDropEvents() {
+            topologyMap.addEventListener('dragover', handleDragOver);
+            topologyMap.addEventListener('drop', handleDrop);
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault(); // Necessário para permitir o drop
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            if (draggedElement) {
+                // CALCULAR CÉLULA DO GRID BASEADO NA POSIÇÃO DO MOUSE
+                const rect = topologyMap.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const offsetY = e.clientY - rect.top;
+
+                // Dimensões definidas no CSS:
+                // Grid-auto-rows: 80px
+                // Colunas: 1fr (total / 12)
+                const colWidth = rect.width / 12; 
+                const rowHeight = 80; 
+
+                // Calcula índice (mínimo 1, máximo 12)
+                let targetCol = Math.max(1, Math.min(12, Math.ceil(offsetX / colWidth)));
+                let targetRow = Math.max(1, Math.ceil(offsetY / rowHeight));
+
+                // LÓGICA DE SWAP (TROCA)
+                // Verifica se já existe alguém na posição alvo
+                const allDevices = document.querySelectorAll('.device');
+                let existingDevice = null;
+
+                allDevices.forEach(dev => {
+                    if (dev === draggedElement) return;
+
+                    const style = window.getComputedStyle(dev);
+                    const r = parseInt(style.gridRowStart);
+                    const c = parseInt(style.gridColumnStart);
+
+                    if (r === targetRow && c === targetCol) {
+                        existingDevice = dev;
+                    }
+                });
+
+                if (existingDevice) {
+                    // SE EXISTIR DISPOSITIVO NO ALVO, ELE VAI PARA A POSIÇÃO ORIGINAL DO ARRASTADO
+                    // Garante que temos valores válidos para a origem
+                    const safeSourceRow = isNaN(sourceRow) ? 1 : sourceRow;
+                    const safeSourceCol = isNaN(sourceCol) ? 1 : sourceCol;
+
+                    existingDevice.style.gridArea = `${safeSourceRow} / ${safeSourceCol}`;
+                }
+
+                // Move o elemento arrastado para o alvo
+                draggedElement.style.gridArea = `${targetRow} / ${targetCol}`;
+            }
+
+            return false;
+        }
+
+        // --- LÓGICA DO MODAL (MANTIDA) ---
         const modal = document.getElementById("modalDispositivo");
         
         function openModal() {
@@ -186,7 +395,7 @@
             }
         }
 
-        // --- LÓGICA DE IMPORTAÇÃO CSV ---
+        // --- LÓGICA DE IMPORTAÇÃO CSV (MANTIDA) ---
         function handleFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -262,4 +471,4 @@
     </script>
 
 </body>
-</html>
+</html>      
