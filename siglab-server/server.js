@@ -453,7 +453,7 @@ app.post('/laboratorios/:id_lab/importar', verifyLogin, checkTipo(['admin']), as
         let count = 0;
         dispositivos.forEach(d => {
             // Gera um ID único simples para cada item do CSV
-            const novoId = `${id_lab}-imp-${Date.now()}-${count++}`;
+            const novoId = `${id_lab}-${Date.now()}-${count++}`;
             
             laboratorios[labIndex].dispositivos.push({
                 id_dispositivo: novoId,

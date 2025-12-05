@@ -8,7 +8,6 @@
     
     <link href="/css/laboratorios.css" rel="stylesheet">
     
-    <!-- Importando fontes retro para o modal -->
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
@@ -23,7 +22,7 @@
             <%= lab.localizacao %>
         </p>
 
-        <!-- painéis de informação (disponibilidade/avisos) -->
+        <!-- painéis de informação -->
         <div class="info-panels-container">
             
             <a href="/disponibilidade/<%= lab.id %>" class="info-card-link">
@@ -124,7 +123,6 @@
                         -->
                         <div class="device <%= disp.status %>">
                             
-                            <!-- Texto visual do status AGORA NO TOPO -->
                             <span class="status-label">
                                 <%= disp.status.replace('_', ' ') %>
                             </span>
