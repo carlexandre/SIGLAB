@@ -22,5 +22,13 @@
     "tipo": "admin",
     "matricula": "523823",
     "password": "d3a9a7c97a437121520a12a7af02d92ab1bb5ee5c8afddb592ba382c09f5dd57d1c868dc8093de3f70775fc5874ea7ff8ce24c10929b31c21f89b26727d356a9"
+  },
+  {
+    "id": 4,
+    "nome": "Arthur Rodrigues",
+    "email": "arthur@alu.ufc.br",
+    "tipo": "aluno",
+    "matricula": "567894",
+    "password": "384579fed6e6ac7a799fc656d3ac15d4f25faed0e7c019a8fa40904eb34af639512696e2d09dd16b8d259a9c90aa8686233ff71dc250ab43317cbb597e8c036c"
   }
 ]

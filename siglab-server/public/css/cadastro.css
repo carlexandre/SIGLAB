@@ -41,13 +41,13 @@ body {
 }
 
 .form-group { margin-bottom: 18px; }
-label { display: block; margin-bottom: 7px; font-size: 0.7em; color: #aaffaa; }
+label { display: block; margin-bottom: 7px; font-size: 0.7em; color: var(--main-green); }
 input, select, textarea {
     width: 96%; 
     padding: 13px;
     background-color: #000;
-    border: 1px solid #00FF00;
-    color: #00FF00;
+    border: 1px solid var(--main-green);
+    color: var(--main-green);
     font-family: 'Press Start 2P', monospace;
     font-size: 0.7em;
     outline: none;
@@ -55,9 +55,9 @@ input, select, textarea {
 }
 
 button.btn-pixel {
-    background-color: #00FF00;
+    background-color: var(--main-green);
     color: #000;
-    border: 2px solid #00FF00;
+    border: 2px solid var(--main-green);
     padding: 13px 18px;
     font-family: 'VT323', monospace;
     cursor: pointer;

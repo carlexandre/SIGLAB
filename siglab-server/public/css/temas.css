@@ -1,0 +1,209 @@
+/* Adicione este arquivo ao seu HTML com: 
+   <link rel="stylesheet" href="temas.css">
+*/
+
+/* --- ALTO CONTRASTE (Acessibilidade) --- */
+/* Fundo preto absoluto, texto amarelo puro, bordas brancas espessas */
+body.theme-contrast {
+    --bg-color: #000000;
+    --main-green: #FFFF00; /* Amarelo puro para leitura máxima */
+    --dim-green: #FFFFFF;  /* Branco para elementos secundários */
+    --alert-pink: #FF0000; /* Vermelho puro para alertas */
+    --alert-orange: #FF8800;
+    --info-blue: #00FFFF;  /* Ciano puro */
+    --ui-gray: #000000;    /* Fundo preto chapado */
+    --card-bg: #000000;
+    --off-gray: #FFFFFF;
+    
+    /* Remove a imagem de grid/fundo para limpar a visão */
+    background-image: none !important;
+}
+
+/* Ajustes específicos para bordas no alto contraste */
+body.theme-contrast * {
+    border-width: 2px !important; /* Bordas mais grossas */
+}
+
+/* AJUSTES DO DROPDOWN PARA ALTO CONTRASTE */
+body.theme-contrast .access-dropdown {
+    border: 2px solid #fff;
+    background-color: #000;
+}
+body.theme-contrast .access-icon {
+    border-color: #ffff00;
+    color: #ffff00;
+}
+body.theme-contrast .accessibility-nav-item:hover .access-icon {
+    background-color: #ffff00;
+    color: #000;
+}
+
+/* --- ICE --- */
+body.theme-ice {
+    --bg-color: #e0e0e0;   /* Prata clássico */
+    --main-green: #000080; /* Azul Navy */
+    --dim-green: #404040;  /* Cinza escuro */
+    --alert-pink: #b800b8; /* Roxo escuro */
+    --alert-orange: #d2691e;
+    --info-blue: #0000FF;
+    --ui-gray: #ffffff;    /* Fundo branco para painéis */
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --off-gray: #808080;
+
+    background-image: 
+        linear-gradient(rgba(0, 0, 128, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 128, 0.05) 1px, transparent 1px) !important;
+    background-color: #c0c0c0 !important;
+    color: var(--main-green);
+}
+
+/* --- REMOÇÃO DE SOMBRAS E GLITCH (LIMPEZA VISUAL TEMA ICE) --- */
+
+/* Remove sombras de texto e animações de glitch (títulos, logos, labels) */
+body.theme-ice .titulo-pagina,
+body.theme-ice h1,
+body.theme-ice h2,
+body.theme-ice h3,
+body.theme-ice .logo-box a,
+body.theme-ice .lab-name,
+body.theme-ice .status-label,
+body.theme-ice nav ul li a,
+body.theme-ice .btn-action,
+body.theme-ice .info-card h2 {
+    text-shadow: none !important;
+    animation: none !important; /* Para a animação que fica tremendo o texto */
+}
+
+/* Remove sombras de caixas (header, cards, botões, inputs) */
+body.theme-ice header,
+body.theme-ice .info-card,
+body.theme-ice .lab-list li a,
+body.theme-ice .modal-content,
+body.theme-ice .btn-action,
+body.theme-ice .sidebar-trigger,
+body.theme-ice .access-dropdown,
+body.theme-ice .device .tooltip,
+body.theme-ice .modal-form input,
+body.theme-ice .modal-form select {
+    box-shadow: none !important;
+}
+
+/* --- CORREÇÕES GERAIS DE CONTRASTE (TEMA ICE) --- */
+
+/* Header e Navegação */
+body.theme-ice header {
+    background-color: #d0d0d0 !important; 
+    border-bottom: 3px solid #ffffff !important;
+}
+/* Estado normal dos links: Azul Navy */
+body.theme-ice header a { 
+    color: var(--main-green) !important; 
+    transition: all 0.2s;
+}
+
+/* Ao passar o mouse: Fundo Azul e Texto Branco */
+body.theme-ice header nav ul li a:hover,
+body.theme-ice header .logo-box a:hover {
+    color: #ffffff !important;
+    background-color: var(--main-green) !important;
+    text-shadow: none !important;
+    border-radius: 4px; 
+}
+
+/* Dropdown de Acessibilidade */
+body.theme-ice .access-dropdown { 
+    background-color: #f0f0f0 !important;
+    border-color: var(--main-green) !important;
+}
+body.theme-ice .widget-label { color: var(--main-green) !important; font-weight: bold; } 
+body.theme-ice .widget-group { border-bottom-color: #aaaaaa !important; }
+
+/* Botões do dropdown */
+body.theme-ice .btn-sidebar { 
+    background-color: var(--main-green) !important; /* Azul */
+    color: #ffffff !important; /* Branco */
+    border-color: #000000 !important; 
+}
+body.theme-ice .btn-sidebar:hover { 
+    background-color: #ffffff !important; 
+    color: var(--main-green) !important; 
+    border-color: var(--main-green) !important;
+}
+
+/* Ícone A na Navbar */
+body.theme-ice .access-icon {
+    border-color: var(--main-green);
+    color: var(--main-green);
+}
+body.theme-ice .accessibility-nav-item:hover .access-icon {
+    background-color: var(--main-green);
+    color: #fff;
+}
+
+/* Tooltips dos Laboratórios */
+body.theme-ice .device .tooltip {
+    background-color: var(--main-green) !important; 
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+body.theme-ice .device.livre .tooltip { border-color: #ffffff !important; color: #ffffff !important; }
+body.theme-ice .device.em_uso .tooltip { border-color: var(--alert-orange) !important; color: var(--alert-orange) !important; }
+body.theme-ice .device.inoperante .tooltip { border-color: #cccccc !important; color: #cccccc !important; }
+
+/* PÁGINA: LISTA DE LABORATÓRIOS (lista-laboratorios.css) */
+body.theme-ice .lab-status {
+    color: #ffffff !important; /* Branco sobre Azul Navy */
+    border: 1px solid #ffffff;
+}
+body.theme-ice .lab-status.status-inativo {
+    color: #fff !important;
+    background-color: #888 !important;
+}
+
+/* Botão "Novo Laboratório" / "Ver Disponibilidade" */
+body.theme-ice .link-novo {
+    color: #ffffff !important; /* Texto branco */
+    background-color: var(--main-green) !important; /* Fundo Azul */
+    border-color: #ffffff !important;
+}
+body.theme-ice .link-novo:hover {
+    background-color: #ffffff !important;
+    color: var(--main-green) !important;
+    border: 1px solid var(--main-green) !important;
+}
+
+/* PÁGINA: DETALHES DO LABORATÓRIO (laboratorios.css) */
+
+/* Modal  */
+body.theme-ice .modal-content {
+    background-color: #d0d0d0 !important; /* Fundo Prata */
+    border: 4px solid #ffffff !important; /* Borda Branca */
+    color: #000080 !important; /* Texto Azul */
+    background-image: none !important; /* Remove grade escura */
+}
+
+/* Inputs do formulário dentro do modal */
+body.theme-ice .modal-form input,
+body.theme-ice .modal-form select {
+    background-color: #ffffff !important; /* Fundo Branco */
+    color: #000000 !important; /* Texto Preto */
+    border: 1px solid #000080 !important;
+}
+body.theme-ice .modal-form label {
+    color: #000080 !important;
+}
+body.theme-ice .close-btn {
+    color: #000080 !important;
+}
+
+/* Mapa de Topologia */
+body.theme-ice .topology-map {
+    background-color: rgba(255, 255, 255, 0.6) !important; /* Fundo claro translúcido */
+    border-color: #ffffff !important;
+}
+
+/* Ajuste nos cards de informação */
+body.theme-ice .info-card {
+    background: rgba(255, 255, 255, 0.5) !important;
+    border-color: var(--main-green) !important;
+}

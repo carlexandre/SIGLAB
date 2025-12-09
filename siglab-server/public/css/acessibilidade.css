@@ -1,0 +1,124 @@
+/* O item da lista na navbar */
+.accessibility-nav-item {
+    position: relative; /* Necessário para o dropdown absoluto funcionar */
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* O ícone "A" no menu */
+.access-icon {
+    font-weight: bold;
+    font-size: 1.4rem !important;
+    border: 2px solid currentColor;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.accessibility-nav-item:hover .access-icon {
+    background-color: var(--main-green);
+    color: black;
+    box-shadow: 0 0 10px var(--main-green);
+}
+
+/* --- MENU DROPDOWN --- */
+.access-dropdown {
+    display: none; /* Escondido por padrão */
+    position: absolute;
+    top: 100%; /* Logo abaixo do navbar */
+    right: 0;  /* Alinhado à direita do item */
+    background-color: rgba(0, 0, 0, 0.95);
+    border: 2px solid var(--main-green);
+    padding: 15px;
+    min-width: 160px;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+    box-shadow: -5px 5px 0px rgba(0, 255, 65, 0.2); /* Sombra Retro Sólida */
+}
+
+/* Mostrar ao passar o mouse (Hover) */
+.accessibility-nav-item:hover .access-dropdown {
+    display: flex;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Grupos de botões */
+.widget-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    border-bottom: 1px dashed var(--dim-green);
+    padding-bottom: 10px;
+}
+.widget-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.widget-label {
+    font-size: 0.9rem;
+    color: var(--main-green);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.btn-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Estilo dos Botões */
+.btn-sidebar {
+    width: 35px;
+    height: 35px;
+    border: 1px solid var(--main-green);
+    background: black;
+    color: var(--main-green);
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.btn-sidebar:hover {
+    background: var(--main-green);
+    color: black;
+    box-shadow: 0 0 8px var(--main-green);
+    transform: scale(1.1);
+}
+
+/* Botões de Tema (Quadrados Coloridos) */
+.btn-sidebar.theme-btn {
+    border-width: 2px;
+}
+
+#btn-theme-contrast {
+    background-color: #000;
+    border-color: #ffff00;
+    color: #ffff00;
+}
+
+#btn-theme-ice {
+    background-color: #c0c0c0;
+    border-color: #000080;
+}

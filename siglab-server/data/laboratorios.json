@@ -32,7 +32,7 @@
         "tipo": "projetor",
         "status": "livre",
         "posicao": {
-          "row": 1,
+          "row": 2,
           "col": 1
         }
       },
@@ -42,7 +42,7 @@
         "tipo": "computador",
         "status": "livre",
         "posicao": {
-          "row": 4,
+          "row": 3,
           "col": 3
         }
       },
@@ -52,8 +52,18 @@
         "tipo": "computador",
         "status": "inoperante",
         "posicao": {
-          "row": 4,
+          "row": 3,
           "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "101-1765234137355",
+        "nome": "PC5",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 5
         }
       }
     ]

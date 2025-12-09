@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link href="/css/footer.css" rel="stylesheet">
     <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/temas.css" rel="stylesheet">
+    <link href="/css/acessibilidade.css" rel="stylesheet">
+    <script src="/js/acessibilidade.js" defer></script>
 
     <style>
         :root {
@@ -61,6 +64,40 @@
                 <% if(user && user.tipo === 'professor') { %>
                     <li><a href="/minhasreservas"><span class="icon">🕰️</span>Minhas Reservas</a></li>
                 <% } %>
+                    
+                <!-- NOVO DROPDOWN DE ACESSIBILIDADE -->
+                <li class="accessibility-nav-item">
+                    <a href="#" class="access-trigger" onclick="return false;">
+                        <span class="icon access-icon">A</span>
+                    </a>
+                    
+                    <div class="access-dropdown">
+                        <!-- Tamanho da Fonte -->
+                        <div class="widget-group">
+                            <span class="widget-label">Fonte</span>
+                            <div class="btn-row">
+                                <button id="btn-font-plus" class="btn-sidebar" title="Aumentar Fonte">A+</button>
+                                <button id="btn-font-minus" class="btn-sidebar" title="Diminuir Fonte">A-</button>
+                            </div>
+                        </div>
+
+                        <!-- Temas -->
+                        <div class="widget-group">
+                            <span class="widget-label">Tema</span>
+                            <div class="btn-row">
+                                <!-- Original -->
+                                <button id="btn-theme-default" class="btn-sidebar theme-btn" title="Original (Matrix)" style="background: #00ff41;"></button>
+                                
+                                <!-- Alto Contraste -->
+                                <button id="btn-theme-contrast" class="btn-sidebar theme-btn" title="Alto Contraste">AC</button>
+                                
+                                <!-- Ice / Claro -->
+                                <button id="btn-theme-ice" class="btn-sidebar theme-btn" title="Ice Y2K"></button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
                 <li>
                     <a href="/logout" class="logout-btn" onclick="return confirm('Tem certeza que deseja encerrar a sessão?');">
                         <span class="icon">🚪</span> Sair
@@ -69,3 +106,4 @@
             </ul>
         </nav>
     </header>
+</body>

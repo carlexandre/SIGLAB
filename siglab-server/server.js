@@ -718,7 +718,7 @@ app.post('/cadastro/avisos', verifyLogin, checkTipo(['admin']), async (req, res)
         res.send(`
             <script>
                 alert("Aviso cadastrado com sucesso!");
-                window.location.href = "/avisos"; // Redireciona para a página de listagem
+                window.location.href = "/"; // Redireciona para a página de listagem
             </script>
         `);
 

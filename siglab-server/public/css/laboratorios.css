@@ -112,7 +112,7 @@ main {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 2px solid #003300;
+    border-bottom: 2px solid var(--dim-green);
     padding-bottom: 10px;
 }
 
@@ -145,7 +145,7 @@ main {
 
 /* Modo de edição */
 .topology-map.editing {
-    border-color: #00FF00;
+    border-color: var(--main-green);
     border-style: solid;
     background-image: 
         linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
@@ -172,7 +172,7 @@ main {
 /* Quando em modo de edição, dispositivos ficam arrastáveis */
 .topology-map.editing .device {
     cursor: grab;
-    border: 1px dashed rgba(0, 255, 0, 0.3);
+    border: 1px dashed var(--dim-green);
     background: rgba(0, 20, 0, 0.5);
 }
 
@@ -269,7 +269,7 @@ main {
 
 .device.livre .tooltip { border-color: var(--main-green); color: var(--main-green); }
 .device.em_uso .tooltip { border-color: var(--warning-yellow); color: var(--warning-yellow); }
-.device.inoperante .tooltip { border-color: var(--off-gray); color: #aaa; }
+.device.inoperante .tooltip { border-color: var(--off-gray); color: var(--off-gray); }
 
 .device:hover .tooltip { visibility: visible; opacity: 1; z-index: 1001 !important; }
 
@@ -295,29 +295,28 @@ main {
 
 .btn-delete-device {
     background: transparent;
-    border: 1px solid #ff3333;
-    color: #ff3333;
+    border: 1px solid var(--alert-pink);
+    color: var(--alert-pink);
     margin-top: 5px;
 }
-.btn-delete-device:hover { background: #ff3333; color: #fff; }
-
+.btn-delete-device:hover { background: var(--alert-pink); color: #fff; }
 /* --- OUTROS ELEMENTOS --- */
 .subtitulo-localizacao {
     text-align: center;
     font-size: 1.1rem;
     margin-top: -18px;
     margin-bottom: 27px;
-    color: #00FF00;
+    color: var(--dim-green);
     letter-spacing: 1px;
 }
 
 .btn-action {
     padding: 8px 16px;
-    border: 2px solid #00FF00;
+    border: 2px solid var(--main-green);
     cursor: pointer;
     font-family: 'VT323', monospace;
     color: #000;
-    background-color: #00FF00;
+    background-color: var(--main-green);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -339,11 +338,11 @@ main {
 /* Botão de Editar Topologia */
 .btn-edit-topology {
     background-color: transparent;
-    color: #00FF00;
-    border: 2px solid #00FF00;
+    color: var(--main-green);
+    border: 2px solid var(--main-green);
 }
 .btn-edit-topology:hover {
-    background-color: #00FF00;
+    background-color: var(--main-green);
     color: #000;
 }
 .btn-edit-topology.saving {
@@ -355,13 +354,13 @@ main {
 .btn-import-modal {
     width: 100%;
     background-color: transparent;
-    color: #00FF00;
+    color: var(--main-green);
     margin-top: 10px;
-    border: 2px dashed #00FF00;
+    border: 2px dashed var(--main-green);
 }
 
 .btn-import-modal:hover {
-    background-color: #00FF00;
+    background-color: var(--main-green);
     color: #000;
     border-style: solid;
 }
@@ -384,13 +383,13 @@ main {
     background-color: #000;
     margin: 5% auto; 
     padding: 25px;
-    border: 4px solid #00FF00;
+    border: 4px solid var(--main-green);
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    box-shadow: 0 0 20px var(--main-green);
     position: relative;
     animation: slideDown 0.3s ease-out;
-    color: #00FF00;
+    color: var(--main-green);
     font-family: 'VT323', monospace;
     background-image: 
         linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
@@ -404,7 +403,7 @@ main {
 }
 
 .close-btn {
-    color: #00FF00;
+    color: var(--main-green);
     float: right;
     font-size: 32px;
     font-weight: bold;
@@ -416,7 +415,7 @@ main {
 .modal-content h3 {
     margin-top: 0;
     font-size: 1.8rem;
-    border-bottom: 2px dashed #00FF00;
+    border-bottom: 2px dashed var(--main-green);
     padding-bottom: 10px;
     text-transform: uppercase;
 }
@@ -430,33 +429,33 @@ main {
 
 .modal-form label {
     font-size: 1.2rem;
-    color: #aaffaa;
+    color: var(--main-green);
     margin-bottom: -5px;
 }
 
 .modal-form input, .modal-form select {
     padding: 12px;
-    border: 1px solid #00FF00;
+    border: 1px solid var(--main-green);
     background-color: #111;
-    color: #00FF00;
+    color: var(--main-green);
     font-family: 'VT323', monospace;
     font-size: 1.2rem;
     width: 100%;
     box-sizing: border-box;
     outline: none;
 }
-.modal-form input::placeholder { color: #005500; }
+.modal-form input::placeholder { color:var(--dim-green); }
 .modal-form input:focus, .modal-form select:focus {
     background-color: #002200;
-    box-shadow: 0 0 10px #00FF00;
+    box-shadow: 0 0 10px var(--main-green);
 }
 
 .modal-form button {
     margin-top: 15px;
     padding: 15px;
-    background-color: #00FF00;
+    background-color: var(--main-green);
     color: #000;
-    border: 2px solid #00FF00;
+    border: 2px solid var(--main-green);
     cursor: pointer;
     font-family: 'VT323', monospace;
     font-size: 1.4rem;
@@ -475,13 +474,13 @@ main {
     display: flex;
     align-items: center;
     margin: 25px 0 15px 0;
-    color: #005500;
+    color: var(--main-green);
     font-size: 1rem;
 }
 .modal-divider::before, .modal-divider::after {
     content: "";
     flex: 1;
-    border-bottom: 1px dashed #005500;
+    border-bottom: 1px dashed var(--main-green);
 }
 .modal-divider span { padding: 0 10px; }
 .import-section { text-align: center; }
