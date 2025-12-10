@@ -33,10 +33,6 @@
         <!-- ativos -->
         <div class="tab-content active" id="ativos">
             
-            <div style="margin-bottom: 15px; color: var(--dim-green); font-size: 0.9rem;">
-                MONITORAMENTO EM TEMPO REAL
-            </div>
-
             <div class="chamados-grid">
                 <% 
                 const ativos = listaChamados.filter(c => c.status !== 'resolvido');
@@ -132,7 +128,7 @@
 
             <div class="detail-row">
                 <span class="detail-label">Descrição do Usuário:</span>
-                <p id="modalDesc" class="detail-value" style="font-style: italic; color: #ccc; font-size: 1.1rem; margin-top:5px;">...</p>
+                <p id="modalDesc" class="detail-value" style="font-style: italic; color: #fff; font-size: 1.1rem; margin-top:5px;">...</p>
             </div>
 
             <form id="formAnotacao" method="POST" action="/chamados/anotar">
@@ -193,13 +189,13 @@
             
             if (chamado.status === 'resolvido') {
                 btnPrincipal.innerText = "Reativar Chamado";
-                btnPrincipal.value = "reabrir"; // Valor enviado para o server
-                btnPrincipal.style.borderColor = "var(--alert-pink)"; // Ex: borda rosa para reabrir
+                btnPrincipal.value = "reabrir";
+                btnPrincipal.style.borderColor = "var(--alert-pink)";
                 btnPrincipal.style.color = "var(--alert-pink)";
             } else {
                 btnPrincipal.innerText = "Marcar Resolvido";
-                btnPrincipal.value = "resolver"; // Valor enviado para o server
-                btnPrincipal.style.borderColor = "var(--dim-green)"; // Ex: borda verde para resolver
+                btnPrincipal.value = "resolver"; 
+                btnPrincipal.style.borderColor = "var(--dim-green)"; 
                 btnPrincipal.style.color = "var(--dim-green)";
             }
 

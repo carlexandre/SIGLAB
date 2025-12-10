@@ -207,6 +207,7 @@ main {
 
 /* --- VARIAÇÕES DE STATUS --- */
 .device.livre .status-label { color: var(--dim-green); }
+.device.livre .device-icon { color: var(--dim-green); }
 .device.livre:hover .status-label {
     color: var(--main-green);
     text-shadow: 0 0 8px var(--main-green), 2px 2px 0 #000;
@@ -217,16 +218,16 @@ main {
     text-shadow: 0 0 15px var(--main-green);
 }
 
-.device.em_uso .status-label { color: var(--warning-yellow); }
-.device.em_uso .device-icon { filter: sepia(100%) hue-rotate(5deg); }
+.device.em_uso .status-label { color: var(--alert-pink); }
+.device.em_uso .device-icon { filter: sepia(100%) hue-rotate(260deg) saturate(700%); }
 .device.em_uso:hover .status-label {
-    color: #ffffaa;
-    text-shadow: 0 0 8px var(--warning-yellow), 2px 2px 0 #000;
+    color: var(--alert-pink);
+    text-shadow: 0 0 8px var(--alert-pink), 2px 2px 0 #000;
 }
 .device.em_uso:hover .device-icon {
     transform: scale(1.15);
-    filter: sepia(100%) hue-rotate(5deg) brightness(1.2);
-    text-shadow: 0 0 15px var(--warning-yellow);
+    filter: sepia(100%) hue-rotate(260deg) saturate(700%) brightness(120%);
+    text-shadow: 0 0 15px var(--alert-pink);
 }
 
 .device.inoperante .status-label { color: var(--off-gray); }
