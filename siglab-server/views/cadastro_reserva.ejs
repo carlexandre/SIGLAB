@@ -54,12 +54,23 @@
 
             <div class="form-group">
                 <label for="id_servidor">ID do Servidor:</label>
-                <input type="number" value="<%= userMatricula %>" id="id_servidor" readonly>
+                <% if(user && user.tipo === 'professor') { %>
+                    <input type="number" value="<%= userMatricula %>" id="id_servidor" name="id_servidor" readonly>
+                <% } %>
+                <% if(user && user.tipo === 'admin') { %>
+                    <input type="number" id="id_servidor" name="id_servidor" placeholder="Ex: 564967">
+                <% } %>
             </div>
 
             <div class="form-group">
                 <label for="name">Nome do Responsável:</label>
-                <input type="text" value="<%= userNome %>" id="name" readonly>
+                <% if(user && user.tipo === 'professor') { %>
+                    <input type="text" value="<%= userNome %>" id="name" name="name" readonly>
+                <% } %>
+                <% if(user && user.tipo === 'admin') { %>
+                    <input type="text" id="name" name="name" placeholder="Ex: Carlos Alexandre">
+                <% } %>
+
             </div>
 
             <div class="form-group">
