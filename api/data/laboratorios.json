@@ -1,36 +1,95 @@
 [
-  { 
-    "id": "101", "nome": "Lab 101", "status": "livre", "localizacao": "Bloco 910 - Lab 101",
+  {
+    "id": "101",
+    "nome": "Lab 101",
+    "status": "disponivel",
+    "localizacao": "Bloco 910 - Lab 101",
+    "descricao": "",
     "dispositivos": [
       {
         "id_dispositivo": "10101",
-        "nome": "PC1", 
+        "nome": "PC1",
         "tipo": "computador",
-        "status": "livre"
+        "status": "em_uso",
+        "posicao": {
+          "row": 1,
+          "col": 3
+        }
       },
       {
-        "id_dispositivo": "10102", 
+        "id_dispositivo": "10102",
         "nome": "PC2",
-        "tipo": "computador", 
-        "status": "inoperante"
+        "tipo": "computador",
+        "status": "inoperante",
+        "posicao": {
+          "row": 1,
+          "col": 4
+        }
       },
       {
-        "id_dispositivo": "10103", 
-        "nome": "Projetor", 
+        "id_dispositivo": "10103",
+        "nome": "Projetor",
         "tipo": "projetor",
-        "status": "livre"
+        "status": "livre",
+        "posicao": {
+          "row": 2,
+          "col": 1
+        }
+      },
+      {
+        "id_dispositivo": "101-1764881680918",
+        "nome": "PC_04",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 3,
+          "col": 3
+        }
+      },
+      {
+        "id_dispositivo": "101-imp-1764881693814-1",
+        "nome": "PC5",
+        "tipo": "computador",
+        "status": "inoperante",
+        "posicao": {
+          "row": 3,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "101-1765234137355",
+        "nome": "PC5",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 5
+        }
       }
     ]
   },
-  { 
-    "id": "102", "nome": "Lab 102", "status": "inativo", "localizacao": "Bloco 910 - Lab 102",
+  {
+    "id": "102",
+    "nome": "Lab 102",
+    "status": "inativo",
+    "localizacao": "Bloco 910 - Lab 102",
+    "descricao": "",
     "dispositivos": [
       {
-        "id_dispositivo": "10201", 
+        "id_dispositivo": "10201",
         "nome": "PC1",
-        "tipo": "computador", 
+        "tipo": "computador",
         "status": "em_uso"
       }
     ]
+  },
+  {
+    "id": "103",
+    "nome": "LEC 1",
+    "status": "disponivel",
+    "localizacao": "Bloco 910, LEC1",
+    "capacidade": 40,
+    "descricao": "",
+    "dispositivos": []
   }
 ]

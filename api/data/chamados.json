@@ -1,11 +1,44 @@
 [
-    {
-        "id_lab": "LAB-03",
-        "id_dispositivo": "PC-12",
-        "titulo": "Monitor piscando intermitentemente",
-        "tipo_problema": "hardware",
-        "gravidade": "media",
-        "descricao": "O monitor liga, mas a imagem fica piscando e apagando a cada 30 segundos. Já verifiquei o cabo HDMI e parece estar bem conectado.",
-        "status": "ativo"
-    }
+  {
+    "id": "ticket-1",
+    "id_lab": "LAB-03",
+    "id_dispositivo": "PC-12",
+    "matricula_usuario": "591823",
+    "titulo": "Monitor piscando intermitentemente",
+    "tipo_problema": "hardware",
+    "gravidade": "media",
+    "descricao": "O monitor liga, mas a imagem fica piscando e apagando a cada 30 segundos. Já verifiquei o cabo HDMI e parece estar bem conectado.",
+    "status": "aberto",
+    "anotacoes": "Test tes",
+    "data_abertura": "2024-06-10T14:30:00",
+    "data_fechamento": null
+  },
+  {
+    "id": "ticket-2",
+    "id_lab": "LAB-03",
+    "id_dispositivo": "PC-12",
+    "matricula_usuario": "564967",
+    "titulo": "Monitor piscando",
+    "tipo_problema": "hardware",
+    "gravidade": "media",
+    "descricao": "Imagem some a cada 30s.",
+    "status": "resolvido",
+    "anotacoes": "Texto lorem Ipsu",
+    "data_abertura": "2024-06-10T14:30:00",
+    "data_fechamento": "2025-12-04T17:12:17.212Z"
+  },
+  {
+    "id": "ticket-3",
+    "id_lab": "LAB-01",
+    "id_dispositivo": "PC-05",
+    "matricula_usuario": "564967",
+    "titulo": "Sem internet",
+    "tipo_problema": "rede",
+    "gravidade": "alta",
+    "descricao": "Cabo rompido.",
+    "status": "aberto",
+    "anotacoes": "Cabo RJ45 substituído em 20/11.",
+    "data_abertura": "2024-06-10T14:30:00",
+    "data_fechamento": null
+  }
 ]
