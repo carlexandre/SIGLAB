@@ -66,6 +66,9 @@
     <script>
         const dadosBrutos = <%- JSON.stringify(reservas) %>;
 
+        // Novo: Variavel para verificar permissão no JS
+        const userType = "<%= user ? user.tipo : 'guest' %>";
+
         const currentLabId = "<%= lab_id === 'geral' ? '' : lab_id %>";
         
         // Objeto que vai alimentar o calendário
@@ -95,6 +98,7 @@
                 }
 
                 reservasDB[dataKey].push({
+                    id: reserva.id, // Novo: ID para exclusão
                     lab: `Lab ${reserva.id_lab}`,
                     hora: horarioFormatado,
                     user: reserva.name,
@@ -184,10 +188,22 @@
                 reservas.forEach(res => {
                     const li = document.createElement('li');
                     li.classList.add('reservation-item');
+                    
+                    // Novo: Lógica para mostrar botão de exclusão apenas para admin
+                    let deleteButton = '';
+                    if (userType === 'admin') {
+                         deleteButton = `
+                            <form action="/reservas/${res.id}/delete" method="POST" style="position: absolute; top: 9px; right: 9px;" onsubmit="return confirm('Deseja realmente deletar esta reserva?');">
+                                <button type="submit" class="btn-delete">X</button>
+                            </form>
+                         `;
+                    }
+
                     li.innerHTML = `
                         <div class="res-time">${res.hora}</div>
                         <div class="res-lab">${res.lab}</div>
                         <div class="res-user">${res.user} - ${res.tipo}</div>
+                        ${deleteButton}
                     `;
                     lista.appendChild(li);
                 });
@@ -205,8 +221,10 @@
             }
 
             btn.href = urlDestino;
-            btn.style.display = 'block';
-            btn.innerText = `+ RESERVAR PARA ${dia}/${mes+1}`;
+            if (btn) { 
+                btn.style.display = 'block';
+                btn.innerText = `+ RESERVAR PARA ${dia}/${mes+1}`;
+            }
         }
 
         function mudarMes(delta) {

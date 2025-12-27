@@ -6,6 +6,7 @@
     --alert-orange: #f0ad4e; 
     --info-blue: #0275d8; 
     --ui-gray: #1a1a1a;
+    --danger-red: #ff3333;
 }
 
 * {
@@ -63,6 +64,7 @@ main {
     padding: 18px;
     border-left: 7px solid var(--dim-green); 
     transition: all 0.2s ease;
+    position: relative; 
 }
 
 .aviso-card:hover {
@@ -75,6 +77,7 @@ main {
     margin-bottom: 9px;
     font-size: 1.6rem;
     color: var(--main-green);
+    padding-right: 30px; 
 }
 
 .aviso-card p {
@@ -89,6 +92,9 @@ main {
     margin-top: 13px;
     border-top: 1px dashed var(--dim-green);
     padding-top: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
 .aviso-card .meta-info p {
@@ -116,4 +122,43 @@ main {
     font-size: 1.1rem;
     border: 1px dashed var(--dim-green);
     padding: 18px;
+}
+
+.btn-delete-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.btn-delete-aviso {
+    background: none;
+    border: none;
+    color: var(--danger-red);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+
+.btn-delete-aviso:hover {
+    text-shadow: 0 0 5px var(--danger-red);
+    transform: scale(1.1);
+}
+
+.btn-edit {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: var(--main-green);
+    color: #000;
+    text-decoration: none;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    border: 1px solid var(--main-green);
+    cursor: pointer;
+    margin-left: auto; 
+}
+
+.btn-edit:hover {
+    background-color: white;
 }

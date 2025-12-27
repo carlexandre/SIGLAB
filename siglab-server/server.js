@@ -240,6 +240,17 @@ app.get('/cadastro/reserva', verifyLogin, checkTipo(['admin', 'professor']), asy
     });
 });
 
+app.post('/reservas/:id/delete', verifyLogin, checkTipo(['admin', 'professor']), async (req, res) => {
+    const response = await postData(`/reservas/${req.params.id}`, {}, 'DELETE');
+
+    if (response.ok) {
+        // Redireciona de volta para a página de onde veio (se possível) ou para minhas reservas
+        res.send(`<script>alert("Reserva removida com sucesso!"); window.location.href = document.referrer || '/minhasreservas';</script>`);
+    } else {
+        res.send(`<script>alert("Erro ao remover a reserva."); window.history.back();</script>`);
+    }
+});
+
 app.post('/cadastro/reserva', verifyLogin, checkTipo(['admin', 'professor']), async (req, res) => {
     // Validação básica de data antes de enviar para API
     if (new Date(req.body.data_inicio) >= new Date(req.body.data_fim)) {
@@ -270,7 +281,14 @@ app.get('/minhasreservas', verifyLogin, checkTipo(['admin', 'professor']), async
 });
 
 // AVISOS
-app.get('/cadastro/avisos', verifyLogin, checkTipo(['admin']), (req, res) => res.render('cadastro_avisos'));
+app.get('/cadastro/avisos', verifyLogin, checkTipo(['admin']), (req, res) => res.render('cadastro_avisos', { aviso: null }));
+
+app.get('/avisos/editar/:id', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const aviso = await getData(`/avisos/${req.params.id}`);
+    if (!aviso) return res.send(`<script>alert("Aviso não encontrado."); window.history.back();</script>`);
+    
+    res.render('cadastro_avisos', { aviso: aviso });
+});
 
 app.post('/cadastro/avisos', verifyLogin, checkTipo(['admin']), async (req, res) => {
     const { labs } = req.body;
@@ -286,6 +304,29 @@ app.post('/cadastro/avisos', verifyLogin, checkTipo(['admin']), async (req, res)
     else res.send(`<script>alert("Erro ao salvar aviso."); window.history.back();</script>`);
 });
 
+app.post('/avisos/editar/:id', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const { labs } = req.body;
+    let labsArray = [];
+    if (labs) labsArray = labs.split(',').map(l => l.trim()).filter(l => l !== "");
+    
+    const payload = { ...req.body, labs: labsArray };
+    
+    const response = await postData(`/avisos/${req.params.id}`, payload, 'PUT');
+    
+    if (response.ok) res.send(`<script>alert("Aviso atualizado com sucesso!"); window.location.href = document.referrer || "/";</script>`);
+    else res.send(`<script>alert("Erro ao atualizar aviso."); window.history.back();</script>`);
+});
+
+app.post('/avisos/delete/:id', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const response = await postData(`/avisos/${req.params.id}`, {}, 'DELETE');
+
+    if (response.ok) {
+        res.send(`<script>alert("Aviso excluído com sucesso!"); window.location.href = document.referrer || '/';</script>`);
+    } else {
+        res.send(`<script>alert("Erro ao excluir o aviso."); window.history.back();</script>`);
+    }
+});
+
 app.get('/laboratorios/:id_lab/avisos', verifyLogin, async (req, res) => {
     const avisos = await getData('/avisos');
     const id = req.params.id_lab;
@@ -297,7 +338,7 @@ app.get('/laboratorios/:id_lab/avisos', verifyLogin, async (req, res) => {
         return filtrolab && (!data_fim || data_fim >= agora);
     }) : [];
 
-    res.render('avisos', { avisos: filtrados });
+    res.render('avisos', { avisos: filtrados, user: req.user });
 });
 
 // CHAMADOS

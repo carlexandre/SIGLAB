@@ -46,26 +46,40 @@
                     
                     <div class="aviso-card <%= classePrioridade %>">
                         
+                        <% if (locals.user && user.tipo === 'admin') { %>
+                            <div class="btn-delete-container">
+                                <form action="/avisos/delete/<%= aviso.id %>" method="POST" onsubmit="return confirm('Tem certeza que deseja apagar este aviso?');">
+                                    <button type="submit" class="btn-delete-aviso" title="Deletar Aviso">X</button>
+                                </form>
+                            </div>
+                        <% } %>
+
                         <h3><%= aviso.titulo %></h3>
                         
                         <p><%= aviso.mensagem %></p>
 
                         <div class="meta-info">
-                            <p>
-                                <strong>Tipo:</strong> <%= aviso.tipo %> | 
-                                <strong>Prioridade:</strong> <%= aviso.prioridade %>
-                            </p>
-                            <p>
-                                <strong>Início:</strong> 
-                                <%= new Date(aviso.dataInicio).toLocaleString('pt-BR') %>
-                            </p>
-
-                            <%# Só exibe a data de término se ela existir (não for null) %>
-                            <% if (aviso.dataFim) { %>
+                            <div>
                                 <p>
-                                    <strong>Término:</strong> 
-                                    <%= new Date(aviso.dataFim).toLocaleString('pt-BR') %>
+                                    <strong>Tipo:</strong> <%= aviso.tipo %> | 
+                                    <strong>Prioridade:</strong> <%= aviso.prioridade %>
                                 </p>
+                                <p>
+                                    <strong>Início:</strong> 
+                                    <%= new Date(aviso.dataInicio).toLocaleString('pt-BR') %>
+                                </p>
+
+                                <%# Só exibe a data de término se ela existir (não for null) %>
+                                <% if (aviso.dataFim) { %>
+                                    <p>
+                                        <strong>Término:</strong> 
+                                        <%= new Date(aviso.dataFim).toLocaleString('pt-BR') %>
+                                    </p>
+                                <% } %>
+                            </div>
+
+                            <% if (locals.user && user.tipo === 'admin') { %>
+                                <a href="/avisos/editar/<%= aviso.id %>" class="btn-edit">✎ EDITAR</a>
                             <% } %>
                         </div>
                     </div>

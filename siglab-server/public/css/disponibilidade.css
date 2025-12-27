@@ -191,6 +191,7 @@ main {
     padding: 9px;
     border-left: 4px solid var(--alert-orange);
     transition: 0.2s;
+    position: relative;
 }
 
 .reservation-item:hover {
@@ -246,3 +247,20 @@ main {
 .reservation-list::-webkit-scrollbar { width: 7px; }
 .reservation-list::-webkit-scrollbar-track { background: #000; }
 .reservation-list::-webkit-scrollbar-thumb { background: var(--dim-green); }
+
+/* Novo: Botão delete */
+.btn-delete {
+    background: none;
+    border: 1px solid var(--main-green);
+    color: var(--main-green);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    padding: 4px 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.btn-delete:hover {
+    background: white;
+    color: black;
+}

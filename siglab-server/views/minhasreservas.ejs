@@ -23,10 +23,16 @@
                     <% if (proximas && proximas.length > 0) { %>
                         <% proximas.forEach(res => { %>
                             <li>
-                                <strong>Lab:</strong> <%= res.id_lab %> | 
-                                <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
-                                <strong>Data:</strong> <%= new Date(res.data_inicio).toLocaleString('pt-BR') %>
-                            </li> 
+                                <span>
+                                    <strong>Lab:</strong> <%= res.id_lab %> | 
+                                    <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
+                                    <strong>Data:</strong> <%= new Date(res.data_inicio).toLocaleString('pt-BR') %>
+                                </span>
+                                <form action="/reservas/<%= res.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Deseja realmente deletar esta reserva?');">
+                                    <button type="submit" class="btn-delete">X</button>
+                                </form>
+                            </li>
+                            
                         <% }); %>
                     <% } else { %>
                         <li>Nenhuma reserva futura encontrada.</li>

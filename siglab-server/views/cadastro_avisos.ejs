@@ -46,27 +46,27 @@
 <body>
     <main class="main-container">
 
-        <h2 class="titulo-pagina">Novo Aviso</h2>
+        <h2 class="titulo-pagina"><%= (locals.aviso) ? 'Editar Aviso' : 'Novo Aviso' %></h2>
         
-        <form id="form-aviso" class="form-cadastro" method="POST" action="/cadastro/avisos">
+        <form id="form-aviso" class="form-cadastro" method="POST" action="<%= (locals.aviso) ? '/avisos/editar/' + aviso.id : '/cadastro/avisos' %>">
         
             <div class="form-group">
                 <label for="titulo">Título:</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Ex: Manutenção da Rede" required>
+                <input type="text" id="titulo" name="titulo" placeholder="Ex: Manutenção da Rede" value="<%= (locals.aviso) ? aviso.titulo : '' %>" required>
             </div>
             
             <div class="form-group">
                 <label for="mensagem">Mensagem (Descrição):</label>
-                <textarea id="mensagem" name="mensagem" rows="4" placeholder="Descreva o aviso..." required></textarea>
+                <textarea id="mensagem" name="mensagem" rows="4" placeholder="Descreva o aviso..." required><%= (locals.aviso) ? aviso.mensagem : '' %></textarea>
             </div>
 
             <div class="form-group">
                 <label for="tipo">Tipo:</label>
                 <select id="tipo" name="tipo" required>
                     <option value="">Selecione um tipo...</option>
-                    <option value="Manutenção">Manutenção</option>
-                    <option value="Informativo">Informativo</option>
-                    <option value="Alerta">Alerta</option>
+                    <option value="Manutenção" <%= (locals.aviso && aviso.tipo === 'Manutenção') ? 'selected' : '' %>>Manutenção</option>
+                    <option value="Informativo" <%= (locals.aviso && aviso.tipo === 'Informativo') ? 'selected' : '' %>>Informativo</option>
+                    <option value="Alerta" <%= (locals.aviso && aviso.tipo === 'Alerta') ? 'selected' : '' %>>Alerta</option>
                 </select>
             </div>
 
@@ -74,29 +74,29 @@
                 <label for="prioridade">Prioridade:</label>
                 <select id="prioridade" name="prioridade" required>
                     <option value="">Selecione a prioridade...</option>
-                    <option value="Baixa">Baixa</option>
-                    <option value="Média">Média</option>
-                    <option value="Alta">Alta</option>
-                    <option value="Crítica">Crítica</option>
+                    <option value="Baixa" <%= (locals.aviso && aviso.prioridade === 'Baixa') ? 'selected' : '' %>>Baixa</option>
+                    <option value="Média" <%= (locals.aviso && aviso.prioridade === 'Média') ? 'selected' : '' %>>Média</option>
+                    <option value="Alta" <%= (locals.aviso && aviso.prioridade === 'Alta') ? 'selected' : '' %>>Alta</option>
+                    <option value="Crítica" <%= (locals.aviso && aviso.prioridade === 'Crítica') ? 'selected' : '' %>>Crítica</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="dataInicio">Início do Aviso:</label>
-                <input type="datetime-local" id="dataInicio" name="dataInicio" required>
+                <input type="datetime-local" id="dataInicio" name="dataInicio" value="<%= (locals.aviso && aviso.dataInicio) ? aviso.dataInicio.substring(0,16) : '' %>" required>
             </div>
             
             <div class="form-group">
                 <label for="dataFim">Fim do Aviso:</label>
-                <input type="datetime-local" id="dataFim" name="dataFim">
+                <input type="datetime-local" id="dataFim" name="dataFim" value="<%= (locals.aviso && aviso.dataFim) ? aviso.dataFim.substring(0,16) : '' %>">
             </div>
 
             <div class="form-group">
                 <label for="labs">Laboratórios (separados por vírgula):</label>
-                <input type="text" id="labs" name="labs" placeholder="Ex: 101, 102, 205">
+                <input type="text" id="labs" name="labs" placeholder="Ex: 101, 102, 205" value="<%= (locals.aviso && aviso.labs) ? aviso.labs.join(', ') : '' %>">
             </div>
 
-            <button type="submit" class="btn-pixel">💾 SALVAR AVISO</button>
+            <button type="submit" class="btn-pixel">💾 <%= (locals.aviso) ? 'SALVAR ALTERAÇÕES' : 'SALVAR AVISO' %></button>
         </form>
         
         <div style="margin-top: 20px; text-align: center; font-family: 'Press Start 2P', monospace;">
@@ -108,54 +108,4 @@
 
 <%- include('partials/footer') %>
 
-<!-- <script>
-    document.getElementById('form-aviso').addEventListener('submit', async (event) => {
-    
-        event.preventDefault();
-        
-        const feedbackEl = document.getElementById('feedback');
-        feedbackEl.textContent = 'Processando...';
-        feedbackEl.style.color = '#ffff00'; // Amarelo enquanto carrega
-
-        const form = event.target;
-        // Coletando valores
-        const titulo = form.titulo.value;
-        const mensagem = form.mensagem.value;
-        const tipo = form.tipo.value;
-        const prioridade = form.prioridade.value;
-        const dataInicio = form.dataInicio.value;
-        const dataFim = form.dataFim.value || null;
-        const labsInput = form.labs.value;
-
-        const labsArray = labsInput.split(',')
-                                   .map(lab => lab.trim())
-                                   .filter(lab => lab.length > 0);
-
-        const dados = {
-            titulo, mensagem, tipo, prioridade, dataInicio, dataFim, labs: labsArray
-        };
-
-        try {
-            const response = await fetch('http://localhost:3001/api/avisos', { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
-            });
-
-            if (response.ok) {
-                feedbackEl.textContent = 'Aviso salvo com sucesso!';
-                feedbackEl.style.color = '#00FF00'; // Verde Neon
-                form.reset();
-            } else {
-                const erroData = await response.json();
-                feedbackEl.textContent = `Erro: ${erroData.message || 'Falha ao salvar'}`;
-                feedbackEl.style.color = '#ff5555'; // Vermelho claro (legível no preto)
-            }
-
-        } catch (error) {
-            console.error('Erro:', error);
-            feedbackEl.textContent = 'Erro de conexão com a API.';
-            feedbackEl.style.color = '#ff5555';
-        }
-    });
-</script> -->
+</html>

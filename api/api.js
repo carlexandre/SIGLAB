@@ -200,6 +200,20 @@ app.post('/api/reservas', (req, res) => {
     }
 });
 
+app.delete('/api/reservas/:id', (req, res) => {
+    const reservas = readData('reservas.json', res);
+    if (!reservas) return res.status(500).send('Erro ao ler banco de dados');
+
+    const index = reservas.findIndex(r => r.id === req.params.id);
+    if (index === -1) return res.status(404).json({ message: "Reserva não encontrada." });
+
+    reservas.splice(index, 1);
+
+    if (writeData('reservas.json', reservas, res)) {
+        res.status(200).json({ message: "Reserva deletada com sucesso." });
+    }
+});
+
 // HISTÓRICO DE ACESSOS
 app.get('/api/acessos', (req, res) => {
     const acessos = readData('acessos.json', res);
@@ -212,6 +226,13 @@ app.get('/api/avisos', (req, res) => {
     res.json(avisos || []);
 });
 
+app.get('/api/avisos/:id', (req, res) => {
+    const avisos = readData('avisos.json', res);
+    const aviso = avisos.find(a => String(a.id) === req.params.id);
+    if (!aviso) return res.status(404).json({ message: "Aviso não encontrado" });
+    res.json(aviso);
+});
+
 app.post('/api/avisos', (req, res) => {
     const avisos = readData('avisos.json', res);
     const novoAviso = req.body;
@@ -222,6 +243,33 @@ app.post('/api/avisos', (req, res) => {
     avisos.push(novoAviso);
     if (writeData('avisos.json', avisos, res)) {
         res.status(201).json(novoAviso);
+    }
+});
+
+app.put('/api/avisos/:id', (req, res) => {
+    const avisos = readData('avisos.json', res);
+    const index = avisos.findIndex(a => String(a.id) === req.params.id);
+    
+    if (index === -1) return res.status(404).json({ message: "Aviso não encontrado" });
+
+    const atualizado = { ...avisos[index], ...req.body };
+    avisos[index] = atualizado;
+
+    if (writeData('avisos.json', avisos, res)) {
+        res.json(atualizado);
+    }
+});
+
+app.delete('/api/avisos/:id', (req, res) => {
+    const avisos = readData('avisos.json', res);
+    const index = avisos.findIndex(a => String(a.id) === req.params.id);
+    
+    if (index === -1) return res.status(404).json({ message: "Aviso não encontrado" });
+
+    avisos.splice(index, 1);
+
+    if (writeData('avisos.json', avisos, res)) {
+        res.json({ message: "Aviso removido" });
     }
 });
 

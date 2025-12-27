@@ -117,3 +117,20 @@ main {
 .history-list li:hover {
     background-color: rgba(0, 255, 65, 0.1);
 }
+
+.btn-delete {
+    background: none;
+    border: 1px solid var(--danger-red);
+    color: var(--danger-red);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7rem;
+    padding: 5px 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.btn-delete:hover {
+    background: var(--danger-red);
+    color: black;
+}
