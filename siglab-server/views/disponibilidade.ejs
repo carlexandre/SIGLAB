@@ -66,7 +66,7 @@
     <script>
         const dadosBrutos = <%- JSON.stringify(reservas) %>;
 
-        // Novo: Variavel para verificar permissão no JS
+        // Passa o tipo de usuário e matrícula para o JS
         const userType = "<%= user ? user.tipo : 'guest' %>";
 
         const currentLabId = "<%= lab_id === 'geral' ? '' : lab_id %>";
@@ -98,10 +98,11 @@
                 }
 
                 reservasDB[dataKey].push({
-                    id: reserva.id, // Novo: ID para exclusão
+                    id: reserva.id, // ID para deletar
                     lab: `Lab ${reserva.id_lab}`,
                     hora: horarioFormatado,
                     user: reserva.name,
+                    id_servidor: reserva.id_servidor,
                     tipo: reserva.motivo || "Reserva"
                 });
             }
@@ -111,6 +112,16 @@
         let diaSelecionado = null;
 
         const nomesMeses = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
+
+        // Função auxiliar para pegar a data de hoje em YYYY-MM-DD
+        const getTodayStr = () => {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        };
+        const todayStr = getTodayStr();
 
         function renderizarCalendario() {
             const ano = dataAtual.getFullYear();
@@ -130,7 +141,7 @@
             for (let i = 0; i < primeiroDiaSemana; i++) {
                 const empty = document.createElement('div');
                 empty.classList.add('day-cell');
-                empty.style.border = 'none'; // Invisível
+                empty.style.border = 'none';
                 empty.style.cursor = 'default';
                 container.appendChild(empty);
             }
@@ -189,9 +200,11 @@
                     const li = document.createElement('li');
                     li.classList.add('reservation-item');
                     
-                    // Novo: Lógica para mostrar botão de exclusão apenas para admin
                     let deleteButton = '';
-                    if (userType === 'admin') {
+                    
+                    const podeDeletar = (userType === 'admin') && (dataKey >= todayStr);
+
+                    if (podeDeletar) {
                          deleteButton = `
                             <form action="/reservas/${res.id}/delete" method="POST" style="position: absolute; top: 9px; right: 9px;" onsubmit="return confirm('Deseja realmente deletar esta reserva?');">
                                 <button type="submit" class="btn-delete">X</button>
@@ -213,15 +226,14 @@
 
             // Atualiza botão de nova reserva
             const btn = document.getElementById('btnNovaReserva');
+            if (btn) {
+                // Exemplo de link dinâmico
+                let urlDestino = `/cadastro/reserva?data=${dataKey}`;
+                if (currentLabId) {
+                    urlDestino += `&lab=${currentLabId}`;
+                }
 
-            // Exemplo de link dinâmico
-            let urlDestino = `/cadastro/reserva?data=${dataKey}`;
-            if (currentLabId) {
-                urlDestino += `&lab=${currentLabId}`;
-            }
-
-            btn.href = urlDestino;
-            if (btn) { 
+                btn.href = urlDestino;
                 btn.style.display = 'block';
                 btn.innerText = `+ RESERVAR PARA ${dia}/${mes+1}`;
             }

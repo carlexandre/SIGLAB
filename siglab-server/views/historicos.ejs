@@ -18,8 +18,15 @@
 
         <!-- navegação das abas -->
         <div class="tab-nav">
-            <button class="tab-link active" data-target="reservas">Histórico de Reservas</button>
-            <button class="tab-link" data-target="usuarios">Histórico de Uso</button>
+            <div class="tab-buttons">
+                <button class="tab-link active" data-target="reservas">Histórico de Reservas</button>
+                <button class="tab-link" data-target="usuarios">Histórico de Uso</button>
+            </div>
+
+            <!-- Input de Pesquisa (Novo) -->
+            <div class="search-container">
+                <input type="text" id="filtroUsuario" class="search-input" placeholder="BUSCAR USUÁRIO">
+            </div>
         </div>
 
         <!-- conteúdo das abas -->
@@ -31,9 +38,9 @@
             <ul class="history-list">
                 <% if (proximas && proximas.length > 0) { %>
                     <% proximas.forEach(res => { %>
-                        <li>
+                        <li class="item-historico">
                             <strong>Lab:</strong> <%= lab.find(l => l.id === res.id_lab)?.nome || res.id_lab %>  %> |
-                            <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
+                            <strong>Usuário:</strong> <span class="nome-usuario"><%= res.name %></span> (<%= res.id_servidor %>) | 
                             <strong>Data:</strong> <%= new Date(res.data_inicio).toLocaleString('pt-BR') %>
                         </li> 
                     <% }); %>
@@ -46,9 +53,9 @@
             <ul class="history-list">
                 <% if (passadas && passadas.length > 0) { %>
                     <% passadas.forEach(res => { %>
-                        <li>
+                        <li class="item-historico">
                             <strong>Lab:</strong> <%= lab.find(l => l.id === res.id_lab)?.nome || res.id_lab %> %> | 
-                            <strong>Usuário:</strong> <%= res.name %> (<%= res.id_servidor %>) | 
+                            <strong>Usuário:</strong> <span class="nome-usuario"><%= res.name %></span> (<%= res.id_servidor %>) | 
                             <strong>Data:</strong> <%= new Date(res.data_fim || res.data_inicio).toLocaleString('pt-BR') %>
                         </li> 
                     <% }); %>
@@ -65,10 +72,10 @@
             <ul class="history-list">
                 <% if (usuarios && usuarios.length > 0) { %>
                     <% usuarios.forEach(user => { %>
-                        <li>
+                        <li class="item-historico">
                             <strong>Lab:</strong> <%= lab.find(l => l.id === user.id_lab)?.nome || user.id_lab %> | 
                             <strong>Dispositivo:</strong> <%= user.name_disp %> (<%= user.id_dispositivo %>) | 
-                            <strong>Usuário:</strong> <%= user.usuario %> (<%= user.id_user %>) | 
+                            <strong>Usuário:</strong> <span class="nome-usuario"><%= user.usuario %></span> (<%= user.id_user %>) | 
                             <strong>Data:</strong> <%= new Date(user.data).toLocaleString('pt-BR') %>
                         </li> 
                     <% }); %>
@@ -83,6 +90,25 @@
     <%- include('partials/footer') %> 
 
     <script>
+        // Lógica de Filtro por Usuário
+        const searchInput = document.getElementById('filtroUsuario');
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const filter = this.value.toLowerCase();
+                const items = document.querySelectorAll('.item-historico');
+
+                items.forEach(item => {
+                    const text = item.innerText.toLowerCase();
+                    if (text.includes(filter)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const tabLinks = document.querySelectorAll('.tab-link');
             const tabContents = document.querySelectorAll('.tab-content');

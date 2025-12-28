@@ -46,6 +46,49 @@
             <% } %>
         </div>
 
+        <!-- MODAL DE GALERIA DE FOTOS -->
+        <div id="modalGaleria" class="modal">
+            <div class="modal-content modal-large">
+                <span class="close-btn" onclick="closeGalleryModal()">&times;</span>
+                <h3>> Galeria_de_Fotos_</h3>
+
+                <!-- Grid de Fotos -->
+                <div class="gallery-grid">
+                    <% if (lab.imagens && lab.imagens.length > 0) { %>
+                        <% lab.imagens.forEach(img => { %>
+                            <!-- CAMINHO: /datas/fotos/{id_lab}/{arquivo} -->
+                            <div class="gallery-item" onclick="expandImage('/datas/fotos/<%= lab.id %>/<%= img %>')">
+                                <img src="/datas/fotos/<%= lab.id %>/<%= img %>" alt="Foto do laboratório">
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <p style="grid-column: 1/-1; text-align: center; color: var(--off-gray);">
+                            [ SEM IMAGENS REGISTRADAS ]
+                        </p>
+                    <% } %>
+                </div>
+
+                <!-- Formulário de Upload (Apenas Admin) -->
+                <% if (user && user.tipo === 'admin') { %>
+                    <div class="modal-divider">
+                        <span>ADICIONAR NOVAS FOTOS</span>
+                    </div>
+                    
+                    <form action="/laboratorios/<%= lab.id %>/upload" method="POST" enctype="multipart/form-data" class="modal-form">
+                        <label for="fotos">Selecione as imagens:</label>
+                        <input type="file" id="fotos" name="fotos" accept="image/*" multiple required>
+                        <button type="submit">⬆️ REALIZAR UPLOAD</button>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- MODAL PARA IMAGEM EXPANDIDA -->
+        <div id="modalImagemExpandida" class="modal-image-overlay" onclick="closeExpandedImage()">
+            <span class="close-image-btn">&times;</span>
+            <img id="imgExpandida" src="" alt="Imagem Expandida">
+        </div>
+
         <!-- MODAL DE CADASTRO DE DISPOSITIVO -->
         <% if (user && user.tipo === 'admin') { %>
             <div id="modalDispositivo" class="modal">
@@ -103,8 +146,15 @@
             <div class="topology-header">
                 <h2>Topologia do Laboratório</h2>
                 
-                <% if (user && user.tipo === 'admin') { %>
-                    <div class="header-buttons">
+                <!-- Botões-->
+                <div class="header-buttons">
+                    
+                    <!-- BOTÃO GALERIA -->
+                    <button onclick="openGalleryModal()" class="btn-action btn-icon" title="Galeria de Fotos">
+                        <h3>Fotos do Laboratório</h3>
+                    </button>
+
+                    <% if (user && user.tipo === 'admin') { %>
                         <!-- Botão de Editar Topologia -->
                         <button id="btnToggleEdit" onclick="toggleEditMode()" class="btn-action btn-edit-topology">
                             <h3 id="btnEditText">📐 Editar Topologia</h3>
@@ -113,8 +163,8 @@
                         <button onclick="openModal()" class="btn-action">
                             <h3>+ Novo Dispositivo</h3>
                         </button>
-                    </div>
-                <% } %>
+                    <% } %>
+                </div>
             </div>
             
             <div class="topology-map" id="topologyMap">
@@ -153,7 +203,7 @@
                                     <p><strong>Tipo:</strong> <%= disp.tipo %></p>
                                     <hr style="border-color: inherit; margin: 5px 0; opacity: 0.5;">
                                     
-                                    <a href="/laboratorios/<%= lab.id %>/report/<%= disp.id_dispositivo %>" class="tooltip-btn btn-report">Reportar Problema</a>
+                                    <a href="/laboratorios/<%= lab.nome %>/report/<%= disp.id_dispositivo %>" class="tooltip-btn btn-report">Reportar Problema</a>
                                     
                                     <% if (user && user.tipo === 'admin') { %>
                                         <form action="/laboratorios/<%= lab.id %>/dispositivos/<%= disp.id_dispositivo %>/delete" method="POST" onsubmit="return confirm('ATENÇÃO ADMIN:\n\nTem certeza que deseja EXCLUIR permanentemente o dispositivo \'<%= disp.nome %>\'?');">
@@ -178,6 +228,29 @@
     <%- include('partials/footer') %> 
 
     <script>
+        // --- FUNÇÕES DA GALERIA ---
+        const modalGaleria = document.getElementById("modalGaleria");
+        const modalImagem = document.getElementById("modalImagemExpandida");
+        const imgExpandida = document.getElementById("imgExpandida");
+
+        function openGalleryModal() {
+            modalGaleria.style.display = "block";
+        }
+
+        function closeGalleryModal() {
+            modalGaleria.style.display = "none";
+        }
+
+        function expandImage(src) {
+            imgExpandida.src = src;
+            modalImagem.style.display = "flex";
+        }
+
+        function closeExpandedImage() {
+            modalImagem.style.display = "none";
+            imgExpandida.src = "";
+        }
+
         // --- VARIÁVEIS DE CONTROLE DE EDIÇÃO ---
         let isEditMode = false;
         let draggedElement = null;
@@ -391,6 +464,9 @@
             if (event.target == modal) {
                 closeModal();
             }
+            if (event.target == modalGaleria) {
+                closeGalleryModal();
+            }
         }
 
         // --- LÓGICA DE IMPORTAÇÃO CSV ---
@@ -469,4 +545,4 @@
     </script>
 
 </body>
-</html>      
+</html>

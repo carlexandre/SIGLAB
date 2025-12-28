@@ -17,11 +17,16 @@
         <h1 class="titulo-pagina">Central de Chamados</h1>
 
         <div class="tab-nav">
-            <button class="tab-link active" data-target="ativos">Chamados Ativos</button>
-            <button class="tab-link" data-target="resolvidos">Histórico (Fechados)</button>
+            <div class="tab-buttons">
+                <button class="tab-link active" data-target="ativos">Chamados Ativos</button>
+                <button class="tab-link" data-target="resolvidos">Histórico (Fechados)</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="filtroLab" class="search-input" placeholder="FILTRAR POR LABORATÓRIO">
+            </div>
         </div>
         
-        <!-- Pequena função helper para formatar datas no EJS -->
         <% 
             function formatarData(isoStr) {
                 if (!isoStr) return 'Data desconhecida';
@@ -49,7 +54,7 @@
                             </div>
                         </div>
                         <div class="card-meta">
-                            LAB: <%= chamado.id_lab %> <br> 
+                            LAB: <span class="lab-id"><%= chamado.id_lab %></span> <br> 
                             ID: <%= chamado.id_dispositivo %> <br>
                             <span style="color: #888;">Cat: <%= chamado.tipo_problema %></span><br>
                             <span style="font-size: 0.8rem; color: #aaa;">
@@ -92,7 +97,7 @@
                             </div>
                         </div>
                         <div class="card-meta" style="color: #555; border-top-color: #333;">
-                            <%= chamado.id_lab %> - <%= chamado.id_dispositivo %> <br>
+                            LAB: <span class="lab-id"><%= chamado.id_lab %></span> - <%= chamado.id_dispositivo %> <br>
                             <span style="font-size: 0.8rem;">
                                 Fechado em: <%= formatarData(chamado.data_fechamento) %>
                             </span>
@@ -141,7 +146,6 @@
                     <button type="submit" name="acao" value="salvar" class="btn-action" style="background-color: #222; color: #fff; border: 1px solid #555;">
                         Salvar Nota
                     </button>
-                    <!-- ID adicionado ao botão para manipular via JS -->
                     <button id="btnAcaoPrincipal" type="submit" name="acao" value="resolver" class="btn-action">
                         Marcar Resolvido
                     </button>
@@ -151,6 +155,27 @@
     </div>
 
     <script>
+        // Lógica de Filtro por Lab
+        const inputFiltro = document.getElementById('filtroLab');
+        
+        if (inputFiltro) {
+            inputFiltro.addEventListener('keyup', function() {
+                const termo = this.value.toLowerCase();
+                const cards = document.querySelectorAll('.card-chamado');
+                
+                cards.forEach(card => {
+                    // Procura no texto completo do card
+                    const textoCard = card.innerText.toLowerCase();
+                    
+                    if (textoCard.includes(termo)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
         // abas
         document.addEventListener('DOMContentLoaded', () => {
             const tabLinks = document.querySelectorAll('.tab-link');

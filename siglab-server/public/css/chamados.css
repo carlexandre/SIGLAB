@@ -62,6 +62,16 @@ h3 { font-size: 0.72rem; }
     gap: 9px;
     border-bottom: 2px solid var(--dim-green);
     margin-bottom: 18px;
+    /* Ajuste para alinhar a busca (Novo) */
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* Container para os botões originais (Novo) */
+.tab-buttons {
+    display: flex;
+    gap: 9px;
 }
 
 .tab-link {
@@ -89,6 +99,36 @@ h3 { font-size: 0.72rem; }
     border-color: var(--main-green);
     text-shadow: 0 0 4px var(--bg-color);
     font-weight: bold;
+}
+
+/* --- Search Bar (Novo) --- */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px dashed var(--dim-green);
+    color: var(--main-green);
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    padding: 5px 10px;
+    width: 250px;
+    outline: none;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.search-input:focus {
+    border-color: var(--main-green);
+    box-shadow: 0 0 5px var(--dim-green);
+    background: rgba(0, 255, 65, 0.05);
+}
+
+.search-input::placeholder {
+    color: var(--dim-green);
+    opacity: 0.6;
 }
 
 /* conteúdo das abas */

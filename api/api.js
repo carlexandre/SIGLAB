@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const multer = require('multer');
 
 const app = express();
 const PORT = 3001; 
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 const readData = (filename, res) => {
     const filePath = path.join(__dirname, 'data', filename);
     try {
-        if (!fs.existsSync(filePath)) return []; // Retorna array vazio se arquivo não existir
+        if (!fs.existsSync(filePath)) return []; 
         const data = fs.readFileSync(filePath, 'utf8');
         return JSON.parse(data);
     } catch (err) {
@@ -36,6 +37,23 @@ const writeData = (filename, data, res) => {
     }
 };
 
+const storageFotos = multer.diskStorage({
+    destination: function (req, file, cb) {
+        // Salva em data/fotos/{id_lab}
+        const idLab = req.params.id;
+        const dir = path.join(__dirname, 'data', 'fotos', idLab);
+        
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+const uploadFotos = multer({ storage: storageFotos });
+
 // USUÁRIOS
 app.get('/api/usuarios', (req, res) => {
     const users = readData('usuarios.json', res);
@@ -48,7 +66,6 @@ app.post('/api/usuarios', (req, res) => {
 
     const novoUsuario = req.body;
     
-    // Verifica duplicidade
     if (users.find(u => u.email === novoUsuario.email)) {
         return res.status(409).json({ message: "Email já cadastrado." });
     }
@@ -81,10 +98,41 @@ app.post('/api/laboratorios', (req, res) => {
     const lastId = labs.length > 0 ? parseInt(labs[labs.length - 1].id) : 100;
     novoLab.id = String(lastId + 1);
     novoLab.dispositivos = [];
+    novoLab.imagens = []; 
 
     labs.push(novoLab);
     if (writeData('laboratorios.json', labs, res)) {
         res.status(201).json(novoLab);
+    }
+});
+
+// UPLOADS FOTOS LABORATÓRIOS
+
+app.post('/api/laboratorios/:id/upload', uploadFotos.array('fotos', 10), (req, res) => {
+    const labs = readData('laboratorios.json', res);
+    const labIndex = labs.findIndex(l => l.id === req.params.id);
+
+    if (labIndex === -1) return res.status(404).json({ message: 'Lab não encontrado' });
+
+    // Pega os nomes dos arquivos salvos pelo Multer
+    const filenames = req.files.map(file => file.filename);
+
+    if (!labs[labIndex].imagens) labs[labIndex].imagens = [];
+    labs[labIndex].imagens.push(...filenames);
+
+    if (writeData('laboratorios.json', labs, res)) {
+        res.status(200).json({ message: "Fotos salvas na API com sucesso" });
+    }
+});
+
+app.get('/api/fotos/:id/:filename', (req, res) => {
+    const filePath = path.join(__dirname, 'data', 'fotos', req.params.id, req.params.filename);
+    
+    // Verifica se arquivo existe e envia
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        res.status(404).send('Imagem não encontrada');
     }
 });
 

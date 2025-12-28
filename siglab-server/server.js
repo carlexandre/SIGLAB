@@ -2,6 +2,9 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = 3000; 
@@ -18,6 +21,9 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })); 
 app.set('view engine', 'ejs');
 app.set('views', './views'); 
+
+// O arquivo fica na RAM apenas o tempo suficiente para enviar à API
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Função para facilitar chamadas GET
 async function getData(endpoint) {
@@ -190,6 +196,58 @@ app.post('/cadastro/laboratorios', verifyLogin, checkTipo(['admin']), async (req
     }
 });
 
+app.post('/laboratorios/:id_lab/upload', verifyLogin, checkTipo(['admin']), upload.array('fotos', 10), async (req, res) => {
+    if (!req.files || req.files.length === 0) {
+        return res.send(`<script>alert("Nenhum arquivo enviado."); window.history.back();</script>`);
+    }
+
+    try {
+        const formData = new FormData();
+        
+        req.files.forEach(file => {
+            const blob = new Blob([file.buffer], { type: file.mimetype });
+            formData.append('fotos', blob, file.originalname);
+        });
+
+        // Envia para a API (que vai salvar no disco protegido)
+        const response = await fetch(`${API_URL}/laboratorios/${req.params.id_lab}/upload`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            res.redirect(`/laboratorios/${req.params.id_lab}`);
+        } else {
+            res.send(`<script>alert("Erro na API ao salvar imagens."); window.history.back();</script>`);
+        }
+    } catch (err) {
+        console.error("Erro no proxy de upload:", err);
+        res.send(`<script>alert("Erro interno de upload."); window.history.back();</script>`);
+    }
+});
+
+app.get('/datas/fotos/:id_lab/:filename', async (req, res) => {
+    try {
+        const { id_lab, filename } = req.params;
+        // URL da API (Remove o /api do final de API_URL se necessário, ou ajusta o path)
+        // API_URL = http://localhost:3001/api
+        const response = await fetch(`${API_URL}/fotos/${id_lab}/${filename}`);
+        
+        if (!response.ok) return res.status(404).send('Imagem não encontrada');
+        
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        
+        const type = response.headers.get('content-type') || 'image/jpeg';
+        res.setHeader('Content-Type', type);
+        res.send(buffer);
+
+    } catch (error) {
+        console.error("Erro proxy imagem:", error);
+        res.status(500).send('Erro ao buscar imagem');
+    }
+});
+
 // ADICIONAR DISPOSITIVOS
 app.post('/laboratorios/:id_lab/dispositivos', verifyLogin, checkTipo(['admin']), async (req, res) => {
     const { id_lab } = req.params;
@@ -333,7 +391,7 @@ app.get('/laboratorios/:id_lab/avisos', verifyLogin, async (req, res) => {
     const agora = new Date();
 
     const filtrados = avisos ? avisos.filter(aviso => {
-        const filtrolab = aviso.labs.includes(id);
+        const filtrolab = Array.isArray(aviso.labs) && aviso.labs.includes(id);
         const data_fim = aviso.dataFim ? new Date(aviso.dataFim) : null;
         return filtrolab && (!data_fim || data_fim >= agora);
     }) : [];
