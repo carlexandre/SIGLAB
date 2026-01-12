@@ -1,11 +1,30 @@
 [
-    {
-        "id_lab": "LAB-03",
-        "id_dispositivo": "PC-12",
-        "titulo": "Monitor piscando intermitentemente",
-        "tipo_problema": "hardware",
-        "gravidade": "media",
-        "descricao": "O monitor liga, mas a imagem fica piscando e apagando a cada 30 segundos. Já verifiquei o cabo HDMI e parece estar bem conectado.",
-        "status": "ativo"
-    }
+  {
+    "titulo": "PC não LIGA",
+    "tipo_problema": "hardware",
+    "gravidade": "media",
+    "descricao": "PC não LIGA",
+    "id_lab": "Lab 101",
+    "id_dispositivo": "10101",
+    "matricula_usuario": "523823",
+    "id": "ticket-1766955693829",
+    "status": "aberto",
+    "data_abertura": "2025-12-28T21:01:33.829Z",
+    "anotacoes": "KLALALA",
+    "data_fechamento": null
+  },
+  {
+    "titulo": "Sem Internet",
+    "tipo_problema": "rede",
+    "gravidade": "alta",
+    "descricao": "Não está conectando a Internet",
+    "id_lab": "LEC 1",
+    "id_dispositivo": "103-1766954772729",
+    "matricula_usuario": "523823",
+    "id": "ticket-1766955738363",
+    "status": "aberto",
+    "data_abertura": "2025-12-28T21:02:18.363Z",
+    "anotacoes": "asdasd",
+    "data_fechamento": null
+  }
 ]

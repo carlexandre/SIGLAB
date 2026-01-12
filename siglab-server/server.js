@@ -248,6 +248,22 @@ app.get('/datas/fotos/:id_lab/:filename', async (req, res) => {
     }
 });
 
+app.post('/laboratorios/:id_lab/status', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const { id_lab } = req.params;
+    const { status } = req.body;
+    const response = await postData(`/laboratorios/${id_lab}/status`, { status }, 'PUT');
+    const result = await response.json();
+    res.json(result);
+});
+
+app.post('/laboratorios/:id_lab/dispositivos/:id_disp/status', verifyLogin, checkTipo(['admin']), async (req, res) => {
+    const { id_lab, id_disp } = req.params;
+    const { status } = req.body;
+    const response = await postData(`/laboratorios/${id_lab}/dispositivos/${id_disp}/status`, { status }, 'PUT');
+    const result = await response.json();
+    res.json(result);
+});
+
 // ADICIONAR DISPOSITIVOS
 app.post('/laboratorios/:id_lab/dispositivos', verifyLogin, checkTipo(['admin']), async (req, res) => {
     const { id_lab } = req.params;

@@ -61,5 +61,20 @@
     ],
     "id": 1762558383505,
     "data": "2025-11-07T23:33:03.506Z"
+  },
+  {
+    "id": 1765233826456,
+    "titulo": "Limpeza",
+    "mensagem": "Limpeza.",
+    "tipo": "Informativo",
+    "prioridade": "Baixa",
+    "dataInicio": "2025-12-17T19:41",
+    "dataFim": "2025-12-26T19:41",
+    "labs": [
+      "102",
+      "101",
+      "103"
+    ],
+    "data": "2025-12-08T22:43:46.456Z"
   }
 ]

@@ -18,6 +18,30 @@
     <main>
         <h1 class="titulo-pagina"><%= lab.nome %></h1>
 
+        <!-- STATUS DO LABORATÓRIO -->
+        <div class="lab-status-display">
+            Status: 
+            <div class="lab-status-wrapper">
+                <span id="labStatusBadge" 
+                      class="lab-status-badge <%= lab.status || 'disponivel' %>"
+                      <% if (user && user.tipo === 'admin') { %> onclick="toggleLabMenu()" <% } %>>
+                    
+                    <span id="labStatusText"><%= (lab.status || 'disponivel').replace('_', ' ').toUpperCase() %></span>
+                    
+                </span>
+                
+                <% if (user && user.tipo === 'admin') { %>
+                    <div id="labStatusMenu" class="tooltip-lab">
+                        <span class="close-status-btn" onclick="toggleLabMenu()">x</span>
+                        <button onclick="changeLabStatus('disponivel')">Disponível</button>
+                        <button onclick="changeLabStatus('ocupado')">Ocupado</button>
+                        <button onclick="changeLabStatus('manutencao')">Manutenção</button>
+                        <button onclick="changeLabStatus('inativo')">Inativo</button>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
         <p class="subtitulo-localizacao">
             <%= lab.localizacao %>
         </p>
@@ -134,7 +158,7 @@
                         <button onclick="document.getElementById('csvFileInput').click()" class="btn-action btn-import-modal">
                             📥 Carregar Arquivo CSV
                         </button>
-                        <p style="font-size: 0.9rem; color: #005500; margin-top: 5px;">*Formato: Nome,Tipo,Status</p>
+                        <p style="font-size: 0.9rem; color: #005500; margin-top: 5px;">*Formato: id_dispositivo,nome,tipo,status</p>
                     </div>
                 </div>
             </div>
@@ -197,7 +221,7 @@
                             </span>
 
                             <!-- Tooltip (Menu de ações e detalhes) -->
-                            <div class="tooltip">
+                            <div class="tooltip" id="tooltip-<%= disp.id_dispositivo %>">
                                 <div class="tooltip-content">
                                     <p><strong>ID:</strong> <%= disp.nome %></p>
                                     <p><strong>Tipo:</strong> <%= disp.tipo %></p>
@@ -206,6 +230,16 @@
                                     <a href="/laboratorios/<%= lab.nome %>/report/<%= disp.id_dispositivo %>" class="tooltip-btn btn-report">Reportar Problema</a>
                                     
                                     <% if (user && user.tipo === 'admin') { %>
+                                        <!-- BOTÃO ALTERAR STATUS -->
+                                        <button class="tooltip-btn btn-change-status" onclick="toggleStatusMenu('<%= disp.id_dispositivo %>')">Alterar Status</button>
+                                        
+                                        <!-- MENU DE OPÇÕES (ESCONDIDO) -->
+                                        <div class="status-options-menu" id="status-menu-<%= disp.id_dispositivo %>">
+                                            <button style="color:var(--main-green)" class="status-option-btn" onclick="changeDeviceStatus('<%= disp.id_dispositivo %>', 'livre')">Livre</button>
+                                            <button style="color:var(--alert-pink)" class="status-option-btn" onclick="changeDeviceStatus('<%= disp.id_dispositivo %>', 'em_uso')">Em Uso</button>
+                                            <button style="color:var(--off-gray)" class="status-option-btn" onclick="changeDeviceStatus('<%= disp.id_dispositivo %>', 'inoperante')">Inoperante</button>
+                                        </div>
+
                                         <form action="/laboratorios/<%= lab.id %>/dispositivos/<%= disp.id_dispositivo %>/delete" method="POST" onsubmit="return confirm('ATENÇÃO ADMIN:\n\nTem certeza que deseja EXCLUIR permanentemente o dispositivo \'<%= disp.nome %>\'?');">
                                             <button type="submit" class="tooltip-btn btn-delete-device">Excluir</button>
                                         </form>
@@ -228,6 +262,104 @@
     <%- include('partials/footer') %> 
 
     <script>
+        // --- FUNÇÕES DE STATUS (AJAX) ---
+        
+        // Alternar visualização do menu de status do laboratório
+        function toggleLabMenu() {
+            const menu = document.getElementById('labStatusMenu');
+            if (menu) {
+                menu.classList.toggle('active');
+            }
+        }
+
+        // Alternar visualização do menu de status do dispositivo
+        function toggleStatusMenu(deviceId) {
+            const menu = document.getElementById(`status-menu-${deviceId}`);
+            // Fecha outros menus se houver
+            document.querySelectorAll('.status-options-menu').forEach(el => {
+                if (el !== menu) el.style.display = 'none';
+            });
+            
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+        }
+
+        // Alterar status do dispositivo
+        async function changeDeviceStatus(deviceId, newStatus) {
+            const idLab = "<%= lab.id %>";
+            try {
+                const response = await fetch(`/laboratorios/${idLab}/dispositivos/${deviceId}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Atualizar UI
+                    const deviceEl = document.getElementById(deviceId);
+                    
+                    // Remover classes antigas
+                    deviceEl.classList.remove('livre', 'em_uso', 'inoperante');
+                    // Adicionar nova
+                    deviceEl.classList.add(newStatus);
+                    
+                    // Atualizar texto
+                    const label = deviceEl.querySelector('.status-label');
+                    label.innerText = newStatus.replace('_', ' ');
+
+                    // Fechar menu
+                    document.getElementById(`status-menu-${deviceId}`).style.display = 'none';
+                } else {
+                    alert("Erro ao atualizar status.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Erro de conexão.");
+            }
+        }
+
+        // Alterar status do Laboratório
+        async function changeLabStatus(newStatus) {
+            const idLab = "<%= lab.id %>";
+            try {
+                const response = await fetch(`/laboratorios/${idLab}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const badge = document.getElementById('labStatusBadge');
+                    const badgeText = document.getElementById('labStatusText');
+                    
+                    // Resetar classes
+                    badge.classList.remove('disponivel', 'ocupado', 'manutencao', 'inativo');
+                    // Add nova classe
+                    badge.classList.add(newStatus);
+                    
+                    // Atualizar texto
+                    badgeText.innerText = newStatus.replace('_', ' ').toUpperCase();
+
+                    // Fechar o menu
+                    toggleLabMenu();
+                    
+                } else {
+                    alert("Erro ao alterar status do laboratório.");
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("Erro de conexão.");
+            }
+        }
+
         // --- FUNÇÕES DA GALERIA ---
         const modalGaleria = document.getElementById("modalGaleria");
         const modalImagem = document.getElementById("modalImagemExpandida");
@@ -531,7 +663,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    alert(result.message);
+                    alert("Importado com sucesso!");
                     window.location.reload(); 
                 } else {
                     alert("Erro ao importar: " + result.message);

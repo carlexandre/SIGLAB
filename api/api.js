@@ -1,13 +1,11 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
 const multer = require('multer');
 
 const app = express();
 const PORT = 3001; 
 
-app.use(cors()); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -103,6 +101,34 @@ app.post('/api/laboratorios', (req, res) => {
     labs.push(novoLab);
     if (writeData('laboratorios.json', labs, res)) {
         res.status(201).json(novoLab);
+    }
+});
+
+app.put('/api/laboratorios/:id/status', (req, res) => {
+    const labs = readData('laboratorios.json', res);
+    const lab = labs.find(l => l.id === req.params.id);
+    if (!lab) return res.status(404).json({ message: 'Lab não encontrado' });
+
+    lab.status = req.body.status;
+    
+    if (writeData('laboratorios.json', labs, res)) {
+        res.json({ success: true, newStatus: lab.status });
+    }
+});
+
+app.put('/api/laboratorios/:id/dispositivos/:id_disp/status', (req, res) => {
+    const labs = readData('laboratorios.json', res);
+    const labIndex = labs.findIndex(l => l.id === req.params.id);
+
+    if (labIndex === -1) return res.status(404).json({ message: 'Lab não encontrado' });
+
+    const disp = labs[labIndex].dispositivos.find(d => d.id_dispositivo === req.params.id_disp);
+    if (!disp) return res.status(404).json({ message: 'Dispositivo não encontrado' });
+
+    disp.status = req.body.status;
+
+    if (writeData('laboratorios.json', labs, res)) {
+        res.json({ success: true, id_dispositivo: disp.id_dispositivo, newStatus: disp.status });
     }
 });
 

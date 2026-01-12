@@ -1,36 +1,544 @@
 [
-  { 
-    "id": "101", "nome": "Lab 101", "status": "livre", "localizacao": "Bloco 910 - Lab 101",
+  {
+    "id": "101",
+    "nome": "Lab 101",
+    "status": "disponivel",
+    "localizacao": "Bloco 910 - Lab 101",
+    "descricao": "",
     "dispositivos": [
       {
         "id_dispositivo": "10101",
-        "nome": "PC1", 
+        "nome": "PC1",
         "tipo": "computador",
-        "status": "livre"
+        "status": "em_uso",
+        "posicao": {
+          "row": 1,
+          "col": 5
+        }
       },
       {
-        "id_dispositivo": "10102", 
+        "id_dispositivo": "10102",
         "nome": "PC2",
-        "tipo": "computador", 
-        "status": "inoperante"
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 3
+        }
       },
       {
-        "id_dispositivo": "10103", 
-        "nome": "Projetor", 
+        "id_dispositivo": "10103",
+        "nome": "Projetor",
         "tipo": "projetor",
-        "status": "livre"
+        "status": "livre",
+        "posicao": {
+          "row": 2,
+          "col": 1
+        }
+      },
+      {
+        "id_dispositivo": "101-1764881680918",
+        "nome": "PC_04",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 3,
+          "col": 3
+        }
+      },
+      {
+        "id_dispositivo": "101-imp-1764881693814-1",
+        "nome": "PC5",
+        "tipo": "computador",
+        "status": "inoperante",
+        "posicao": {
+          "row": 3,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "101-1765234137355",
+        "nome": "PC5",
+        "tipo": "computador",
+        "status": "inoperante",
+        "posicao": {
+          "row": 1,
+          "col": 4
+        }
       }
     ]
   },
-  { 
-    "id": "102", "nome": "Lab 102", "status": "inativo", "localizacao": "Bloco 910 - Lab 102",
+  {
+    "id": "102",
+    "nome": "Lab 102",
+    "status": "inativo",
+    "localizacao": "Bloco 910 - Lab 102",
+    "descricao": "",
     "dispositivos": [
       {
-        "id_dispositivo": "10201", 
+        "id_dispositivo": "10201",
         "nome": "PC1",
-        "tipo": "computador", 
-        "status": "em_uso"
+        "tipo": "computador",
+        "status": "em_uso",
+        "posicao": {
+          "row": 1,
+          "col": 3
+        }
+      },
+      {
+        "id_dispositivo": "102-1768244955793-0",
+        "nome": "10101",
+        "tipo": "pc1",
+        "status": "computador",
+        "posicao": {
+          "row": 1,
+          "col": 5
+        }
+      },
+      {
+        "id_dispositivo": "102-1768244955793-1",
+        "nome": "10102",
+        "tipo": "pc2",
+        "status": "computador",
+        "posicao": {
+          "row": 1,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "102-1768244955793-2",
+        "nome": "10103",
+        "tipo": "projetor",
+        "status": "projetor",
+        "posicao": {
+          "row": 1,
+          "col": 2
+        }
       }
+    ]
+  },
+  {
+    "id": "103",
+    "nome": "LEC 1",
+    "status": "ocupado",
+    "localizacao": "Bloco 910, LEC1",
+    "capacidade": 40,
+    "descricao": "",
+    "dispositivos": [
+      {
+        "nome": "PC_01",
+        "tipo": "computador",
+        "status": "livre",
+        "id_dispositivo": "103-1766954772729",
+        "posicao": {
+          "row": 9,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852080-0",
+        "nome": "PC_02",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 8,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-1",
+        "nome": "PC_03",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 6,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-2",
+        "nome": "PC_04",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 7,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-3",
+        "nome": "PC_05",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 4,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-4",
+        "nome": "PC_06",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 3,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-5",
+        "nome": "PC_07",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 2,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-6",
+        "nome": "PC_08",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 10
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-7",
+        "nome": "PC_09",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 9,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-8",
+        "nome": "PC_10",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 8,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-9",
+        "nome": "PC_11",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 6,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-10",
+        "nome": "PC_12",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 7,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-11",
+        "nome": "PC_13",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 4,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-12",
+        "nome": "PC_14",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 3,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-13",
+        "nome": "PC_15",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 2,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-14",
+        "nome": "PC_16",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 8
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-15",
+        "nome": "PC_17",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 9,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-16",
+        "nome": "PC_18",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 8,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-17",
+        "nome": "PC_19",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 9,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-18",
+        "nome": "PC_20",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 8,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-19",
+        "nome": "PC_21",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 8,
+          "col": 2
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-20",
+        "nome": "PC_22",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 9,
+          "col": 2
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-21",
+        "nome": "PC_23",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 6,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-22",
+        "nome": "PC_24",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 7,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-23",
+        "nome": "PC_25",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 4,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-24",
+        "nome": "PC_26",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 3,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-25",
+        "nome": "PC_27",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 2,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-26",
+        "nome": "PC_28",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 6
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-27",
+        "nome": "PC_29",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 7,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-28",
+        "nome": "PC_30",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 6,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-29",
+        "nome": "PC_31",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 7,
+          "col": 2
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-30",
+        "nome": "PC_32",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 6,
+          "col": 2
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-31",
+        "nome": "PC_33",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 4,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-32",
+        "nome": "PC_34",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 3,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-33",
+        "nome": "PC_35",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-34",
+        "nome": "PC_36",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 2,
+          "col": 4
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-35",
+        "nome": "PC_37",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 4,
+          "col": 2
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-36",
+        "nome": "PC_38",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 2,
+          "col": 2
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-37",
+        "nome": "PC_39",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 3,
+          "col": 2
+        }
+      },
+      {
+        "id_dispositivo": "103-1768243852081-38",
+        "nome": "PC_40",
+        "tipo": "computador",
+        "status": "livre",
+        "posicao": {
+          "row": 1,
+          "col": 2
+        }
+      },
+      {
+        "nome": "Projetor",
+        "tipo": "projetor",
+        "status": "livre",
+        "id_dispositivo": "103-1768244633276",
+        "posicao": {
+          "row": 5,
+          "col": 12
+        }
+      }
+    ],
+    "imagens": [
+      "1766962869251-lec2.jpg",
+      "1766962869259-lec1-768x406.jpg"
     ]
   }
 ]
