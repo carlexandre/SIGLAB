@@ -334,7 +334,7 @@ app.post('/cadastro/reserva', verifyLogin, checkTipo(['admin', 'professor']), as
     const response = await postData('/reservas', req.body);
 
     if (response.ok) {
-        res.send(`<script>alert("Reserva confirmada!"); window.location.href = "/minhasreservas";</script>`);
+        res.send(`<script>alert("Reserva confirmada!"); window.location.href = "/disponibilidade/geral";</script>`);
     } else if (response.status === 409) {
         const errorData = await response.json();
         res.send(`<script>alert("ERRO: Já existe uma reserva (Responsável: ${errorData.responsavel})."); window.history.back();</script>`);
